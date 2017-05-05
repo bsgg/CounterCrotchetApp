@@ -8,10 +8,7 @@ namespace CCounter
     public class PatternSettingsUI : MonoBehaviour
     {
         [SerializeField]
-        private InputField m_NamePart;
-
-        [SerializeField]
-        private InputField m_NumberRounds;
+        private InputField m_NamePattern;
 
         [Header("Cell Round")]
         [SerializeField]
@@ -53,20 +50,20 @@ namespace CCounter
             m_StichType.AddOptions(dropDownList);
             m_StichSelected = 0;
             m_StichType.value = m_StichSelected;
+
+            m_PatterSettings = new PatternSettings();
             Show();
         }
 
         public void Show()
         {
-            m_NamePart .text= "";
-            m_NumberRounds.text = "0";
+            m_NamePattern.text= "";
             m_StichSelected = 0;
             m_StichType.value = m_StichSelected;
             m_TestCell.text = "Stich(es): ";
 
             m_NumberRepetitionsStich.text = "0";
             m_NumberRepsPerCell.text = "1";
-           // PatternSettings pSettings = new PatternSettings(m_NamePart.text, int.Parse(m_NumberRounds.text));
         }
 
         public void OnValuStichTypeChange(int id)
@@ -80,7 +77,7 @@ namespace CCounter
             // Add curent Stich
             string currentSt = m_StichesAbbreviations[m_StichSelected];
             // Check reps
-            int reps = int.Parse(m_NumberRounds.text);
+            int reps = int.Parse(m_NumberRepetitionsStich.text);
             if (reps > 0)
             {
                 if (m_StichSelected == 0)
@@ -143,6 +140,7 @@ namespace CCounter
                     stiches += " , ";
                 }
 
+                // TODO: TOTAL STICHES!!
                 m_PatterSettings.AddRound(m_CurrentRound);
             }          
         }
@@ -151,6 +149,12 @@ namespace CCounter
         {
             m_CurrentRound.Clear();
             m_PatterSettings.RemoveLastRound();
+        }
+
+        public void GeneratePattern()
+        {
+            m_PatterSettings.Name = m_NamePattern.text;
+            CCFileUtil.SavePatternJSON(m_PatterSettings);
         }
 	}
 }

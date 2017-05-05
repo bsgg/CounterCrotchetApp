@@ -24,11 +24,11 @@ namespace CCounter
 
     public class PatternSettings 
     {
-        private string m_NamePart = "";
-        public string NamePart
+        private string m_Name = "";
+        public string Name
         {
-            get { return m_NamePart; }
-            set { m_NamePart = value; }
+            get { return m_Name; }
+            set { m_Name = value; }
         }
         private List<Round> m_Rounds;
 

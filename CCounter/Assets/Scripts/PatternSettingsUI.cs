@@ -40,6 +40,9 @@ namespace CCounter
         [SerializeField]
         private InputField m_NumberRepsPerCell;
 
+        private Round m_CurrentRound;
+        private PatternSettings m_PatterSettings;
+
         private void Start()
         {
             List<string> dropDownList = new List<string>();
@@ -91,12 +94,12 @@ namespace CCounter
             m_CurrentStiches.Add(currentSt);
 
             // Set test cell
-            string cell = m_Stiches[m_StichSelected] + "(" + m_StichesAbbreviations[m_StichSelected] + ")";
+            string cell = " " + m_Stiches[m_StichSelected] + "(" + m_StichesAbbreviations[m_StichSelected] + ")";
             if (reps > 0)
             {
                 cell += " x " + reps.ToString();
             }
-            m_TestCell.text += cell + "\n";            
+            m_TestCell.text += cell;            
         }
         
         public void OnRemoveCurrentCell()
@@ -106,21 +109,48 @@ namespace CCounter
             m_CurrentStiches = new List<string>();
         }
 
-        public void GenerateRound()
-        {
-            int reps = int.Parse(m_NumberRepsPerCell.text);
-            if (reps <= 0)
-            {
-                reps = 1;
-            }
-
-            
-        }
-           
-
        
 
+        public void GenerateRound()
+        {
+            if (m_CurrentStiches.Count > 0)
+            {
+                m_CurrentRound = new Round();
+                int reps = int.Parse(m_NumberRepsPerCell.text);
+                if (reps <= 0)
+                {
+                    reps = 1;
+                }
 
+                // 1 Stich
+                string stich = "";
+                for (int iStich = 0; iStich < m_CurrentStiches.Count; iStich++)
+                {
+                    stich += m_CurrentStiches[iStich] + " ";
+                }
+                stich += "x" + reps;
+                m_CurrentRound.Summary = stich;
 
+                // Total Stiches
+                string stiches = "";
+                for (int iReps = 0; iReps < reps; iReps++)
+                {
+                    for (int iStich = 0; iStich < m_CurrentStiches.Count; iStich++)
+                    {
+                        stiches += m_CurrentStiches[iStich] + " ";
+                    }
+                    m_CurrentRound.Stiches.Add(stiches);
+                    stiches += " , ";
+                }
+
+                m_PatterSettings.AddRound(m_CurrentRound);
+            }          
+        }
+
+        private void RemoveCurrentRound()
+        {
+            m_CurrentRound.Clear();
+            m_PatterSettings.RemoveLastRound();
+        }
 	}
 }

@@ -1,0 +1,126 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace CCounter
+{
+    public class PatternSettingsUI : MonoBehaviour
+    {
+        [SerializeField]
+        private InputField m_NamePart;
+
+        [SerializeField]
+        private InputField m_NumberRounds;
+
+        [Header("Cell Round")]
+        [SerializeField]
+        private Dropdown m_StichType;
+
+        [SerializeField]
+        private InputField m_NumberRepetitionsStich;
+
+        [SerializeField]
+        private Text m_TestCell;
+
+        private List<string> m_CurrentStiches = new List<string>();
+
+        //List<string> m_ListDropDownStiches;
+        string[] m_Stiches = new string[] {
+            "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
+            "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
+            "Half Double Crotchet" };
+        string[] m_StichesAbbreviations = new string[] {
+            "Mg", "Sl", "Sc", "Inc",
+            "Inv Inc", "Dec", "Inv Dec", "Dc",
+            "Hdc" };
+
+        private int m_StichSelected = 0;
+
+        [SerializeField]
+        private InputField m_NumberRepsPerCell;
+
+        private void Start()
+        {
+            List<string> dropDownList = new List<string>();
+            for (int i= 0; i< m_Stiches.Length; i++)
+            {
+                dropDownList.Add(m_Stiches[i] + "(" + m_StichesAbbreviations[i] + ")");
+            }
+            m_StichType.AddOptions(dropDownList);
+            m_StichSelected = 0;
+            m_StichType.value = m_StichSelected;
+            Show();
+        }
+
+        public void Show()
+        {
+            m_NamePart .text= "";
+            m_NumberRounds.text = "0";
+            m_StichSelected = 0;
+            m_StichType.value = m_StichSelected;
+            m_TestCell.text = "Stich(es): ";
+
+            m_NumberRepetitionsStich.text = "0";
+            m_NumberRepsPerCell.text = "1";
+           // PatternSettings pSettings = new PatternSettings(m_NamePart.text, int.Parse(m_NumberRounds.text));
+        }
+
+        public void OnValuStichTypeChange(int id)
+        {
+            Debug.Log("OnValuStichTypeChange: " + id);
+            m_StichSelected = id;
+        }
+
+        public void OnAddCell()
+        {
+            // Add curent Stich
+            string currentSt = m_StichesAbbreviations[m_StichSelected];
+            // Check reps
+            int reps = int.Parse(m_NumberRounds.text);
+            if (reps > 0)
+            {
+                if (m_StichSelected == 0)
+                {
+                    currentSt = m_StichesAbbreviations[m_StichSelected] + " " + reps.ToString();
+                }else
+                {
+                    currentSt = reps.ToString() + " " + m_StichesAbbreviations[m_StichSelected];
+                }               
+            }
+            m_CurrentStiches.Add(currentSt);
+
+            // Set test cell
+            string cell = m_Stiches[m_StichSelected] + "(" + m_StichesAbbreviations[m_StichSelected] + ")";
+            if (reps > 0)
+            {
+                cell += " x " + reps.ToString();
+            }
+            m_TestCell.text += cell + "\n";            
+        }
+        
+        public void OnRemoveCurrentCell()
+        {
+            m_TestCell.text = "Stich(es): ";
+            m_CurrentStiches.Clear();
+            m_CurrentStiches = new List<string>();
+        }
+
+        public void GenerateRound()
+        {
+            int reps = int.Parse(m_NumberRepsPerCell.text);
+            if (reps <= 0)
+            {
+                reps = 1;
+            }
+
+            
+        }
+           
+
+       
+
+
+
+	}
+}

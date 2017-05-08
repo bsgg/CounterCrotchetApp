@@ -2,23 +2,67 @@
 using System.Collections.Generic;
 
 namespace CCounter
-{ 
+{
+    public class Stich
+    {
+        private string m_Abbr;
+        public string Abbr
+        {
+            get { return m_Abbr; }
+            set { m_Abbr = value; }
+        }
+        private string m_Name;
+        public string Name
+        {
+            get { return m_Name; }
+            set { m_Name = value; }
+        }
+        private int m_NumberRepeats;
+        public int NumberRepeats
+        {
+            get { return m_NumberRepeats; }
+            set { m_NumberRepeats = value; }
+        }
+
+        public Stich()
+        {
+            m_Abbr = "";
+            m_Name = "";
+            m_NumberRepeats = 0;
+        }
+    }
+
     public class Round
     {
-        public string Summary;
-        public List<string> Stiches;
+        private int m_RoundNumber;
+        public int RoundNumber
+        {
+            get { return m_RoundNumber; }
+            set { m_RoundNumber = value; }
+        }
+        private List<Stich> m_Stiches;
+        private List<Stich> m_AllRepeatsStiches;
 
         public Round()
         {
-            Summary = "";
-            Stiches = new List<string>(); 
+            m_RoundNumber = 0;
+            m_Stiches = new List<Stich>();
+            m_AllRepeatsStiches = new List<Stich>();
+        }
+
+        public void AddStich(Stich stich)
+        {
+            m_Stiches.Add(stich);
+        }
+
+        public void AddStichesAllRepeats(Stich stich)
+        {
+            m_AllRepeatsStiches.Add(stich);
         }
 
         public void Clear()
         {
-            Summary = "";
-            Stiches.Clear();
-            Stiches = new List<string>();
+            
         }
     }
 

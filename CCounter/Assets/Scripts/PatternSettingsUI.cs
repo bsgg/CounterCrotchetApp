@@ -10,29 +10,36 @@ namespace CCounter
         [SerializeField]
         private InputField m_NamePattern;
 
-        [Header("Cell Round")]
-        [SerializeField]
-        private Dropdown m_StichType;
+        [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
+        [SerializeField] private Text m_CurrentTextRound;
 
-        [SerializeField]
-        private InputField m_NumberRepetitionsStich;
 
-        [SerializeField]
-        private Text m_TestCell;
+        /* [Header("Cell Round")]
+         [SerializeField]
+         private Dropdown m_StichType;
 
-        private List<string> m_CurrentStiches = new List<string>();
+         [SerializeField]
+         private InputField m_NumberRepetitionsStich;
 
-        //List<string> m_ListDropDownStiches;
-        string[] m_Stiches = new string[] {
-            "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
-            "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
-            "Half Double Crotchet" };
-        string[] m_StichesAbbreviations = new string[] {
-            "Mg", "Sl", "Sc", "Inc",
-            "Inv Inc", "Dec", "Inv Dec", "Dc",
-            "Hdc" };
+         [SerializeField]
+         private InputField m_SpecificStich;
 
-        private int m_StichSelected = 0;
+         [SerializeField]
+         private Text m_TestCell;
+
+         private List<string> m_CurrentStiches = new List<string>();
+
+         //List<string> m_ListDropDownStiches;
+         string[] m_Stiches = new string[] {
+             "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
+             "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
+             "Half Double Crotchet" };
+         string[] m_StichesAbbreviations = new string[] {
+             "Mg", "Sl", "Sc", "Inc",
+             "Inv Inc", "Dec", "Inv Dec", "Dc",
+             "Hdc" };
+
+         private int m_StichSelected = 0;*/
 
         [SerializeField]
         private InputField m_NumberRepsPerCell;
@@ -42,7 +49,11 @@ namespace CCounter
 
         private void Start()
         {
-            List<string> dropDownList = new List<string>();
+            m_PatterSettings = new PatternSettings();
+            m_RoundSettingsUI.Init();
+
+            m_CurrentTextRound.text = "Round 3 Stich(es):";
+            /*List<string> dropDownList = new List<string>();
             for (int i= 0; i< m_Stiches.Length; i++)
             {
                 dropDownList.Add(m_Stiches[i] + "(" + m_StichesAbbreviations[i] + ")");
@@ -51,64 +62,116 @@ namespace CCounter
             m_StichSelected = 0;
             m_StichType.value = m_StichSelected;
 
-            m_PatterSettings = new PatternSettings();
-            Show();
+
+            Show();*/
         }
 
-        public void Show()
+        public void OnAddStich()
+        {
+            m_RoundSettingsUI.AddStich();
+            m_CurrentTextRound.text = "Round 3 Stich(es):" + m_RoundSettingsUI.PrintStiches();
+        }
+
+        public void OnAddSpecialStich()
+        {
+            m_RoundSettingsUI.AddSpecialStich();
+            m_CurrentTextRound.text = "Round 3 Stich(es):" + m_RoundSettingsUI.PrintStiches();
+        }
+
+
+
+        /*public void Show()
         {
             m_NamePattern.text= "";
-            m_StichSelected = 0;
-            m_StichType.value = m_StichSelected;
-            m_TestCell.text = "Stich(es): ";
-
-            m_NumberRepetitionsStich.text = "0";
+            m_CurrentTextRound.text = "Stich(es): ";
             m_NumberRepsPerCell.text = "1";
-        }
+            ClearCurrentCellStich();
+        }*/
 
-        public void OnValuStichTypeChange(int id)
+
+
+
+       /* public void OnValuStichTypeChange(int id)
         {
             Debug.Log("OnValuStichTypeChange: " + id);
             m_StichSelected = id;
-        }
+        }*/
 
-        public void OnAddCell()
+        /*public void OnAddCell()
         {
-            // Add curent Stich
-            string currentSt = m_StichesAbbreviations[m_StichSelected];
-            // Check reps
+            // Check reps for stich
             int reps = int.Parse(m_NumberRepetitionsStich.text);
-            if (reps > 0)
-            {
-                if (m_StichSelected == 0)
-                {
-                    currentSt = m_StichesAbbreviations[m_StichSelected] + " " + reps.ToString();
-                }else
-                {
-                    currentSt = reps.ToString() + " " + m_StichesAbbreviations[m_StichSelected];
-                }               
-            }
-            m_CurrentStiches.Add(currentSt);
 
-            // Set test cell
-            string cell = " " + m_Stiches[m_StichSelected] + "(" + m_StichesAbbreviations[m_StichSelected] + ")";
-            if (reps > 0)
+            // Add curent Stich
+            string currentSt = string.Empty;
+
+            // Check if specific stich is empty
+            if (!string.IsNullOrEmpty(m_SpecificStich.text))
             {
-                cell += " x " + reps.ToString();
+                currentSt = m_SpecificStich.text;
+                if (reps > 0)
+                {
+                    currentSt += " " + reps.ToString();
+                }
+
+                m_CurrentStiches.Add(currentSt);
+
+                // Set test cell
+                string cell = currentSt;
+                if (reps > 0)
+                {
+                    cell += " x " + reps.ToString();
+                }
+                m_TestCell.text += cell;
             }
-            m_TestCell.text += cell;            
+            // otherwise, select from predefined stiches
+            else
+            {
+                currentSt = m_StichesAbbreviations[m_StichSelected];
+                // Check reps
+                if (reps > 0)
+                {
+                    if (m_StichSelected == 0)
+                    {
+                        currentSt = m_StichesAbbreviations[m_StichSelected] + " " + reps.ToString();
+                    }
+                    else
+                    {
+                        currentSt = reps.ToString() + " " + m_StichesAbbreviations[m_StichSelected];
+                    }
+                }
+                m_CurrentStiches.Add(currentSt);
+
+                // Set test cell
+                string cell = " " + m_Stiches[m_StichSelected] + "(" + m_StichesAbbreviations[m_StichSelected] + ")";
+                if (reps > 0)
+                {
+                    cell += " x " + reps.ToString();
+                }
+                m_TestCell.text += cell;
+            }
+
+            // Clean selection
+            ClearCurrentCellStich();
         }
-        
-        public void OnRemoveCurrentCell()
+
+        private void ClearCurrentCellStich()
         {
+            m_SpecificStich.text = string.Empty;
+            m_StichSelected = 0;
+            m_StichType.value = m_StichSelected;
+            m_NumberRepetitionsStich.text = "0";
+        }*/
+        
+      /*  public void OnRemoveCurrentCell()
+        {
+            ClearCurrentCellStich();
             m_TestCell.text = "Stich(es): ";
             m_CurrentStiches.Clear();
             m_CurrentStiches = new List<string>();
-        }
+        }   */    
 
-       
-
-        public void GenerateRound()
+        /*public void GenerateRound()
         {
             if (m_CurrentStiches.Count > 0)
             {
@@ -155,6 +218,6 @@ namespace CCounter
         {
             m_PatterSettings.Name = m_NamePattern.text;
             CCFileUtil.SavePatternJSON(m_PatterSettings);
-        }
+        }*/
 	}
 }

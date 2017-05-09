@@ -48,10 +48,15 @@ namespace CCounter
 
         public void OnSaveRound()
         {
-            int numberRepeats = int.Parse(m_RepeatsPerGroupStiches.text);
+            int numberRepeatsPerGroup = 1;
+
+            int.TryParse(m_RepeatsPerGroupStiches.text, out numberRepeatsPerGroup));
+            
+
+            //int numberRepeats = int.Parse(m_RepeatsPerGroupStiches.text);
             int roundNumber = int.Parse(m_RoundNumber.text);
 
-            Round round = m_RoundSettingsUI.CreateRound(numberRepeats, roundNumber);
+            Round round = m_RoundSettingsUI.CreateRound(numberRepeatsPerGroup, roundNumber);
             CCFileUtil.SaveRoundToJSON(round, m_PatternName.text);
 
             Debug.Log("SAVE ROUND TO JSON");

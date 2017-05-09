@@ -7,6 +7,8 @@ namespace CCounter
 {
     public class RoundSettingsUI : MonoBehaviour
     {
+        
+
         string[] m_Stiches = new string[] {
             "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
             "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
@@ -160,7 +162,7 @@ namespace CCounter
                 {                   
                     for (int i = 0; i < m_ListStiches.Count; i++)
                     {
-                        // Fill the summary
+                        // Fill the repetitions
                         round.AddStichesAllRepeats(m_ListStiches[i]);
                     }
                 }

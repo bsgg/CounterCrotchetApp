@@ -24,11 +24,19 @@ namespace CCounter
             set { m_NumberRepeats = value; }
         }
 
+        private bool m_IsTickedOff = false;
+        public bool IsTickedOff
+        {
+            get { return m_IsTickedOff; }
+            set { m_IsTickedOff = value; }
+        }
+
         public Stich()
         {
             m_Abbr = "";
             m_Name = "";
             m_NumberRepeats = 0;
+            m_IsTickedOff = false;
         }
     }
 

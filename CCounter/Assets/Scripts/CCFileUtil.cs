@@ -10,7 +10,41 @@ namespace CCounter
     {
         public static string PATHJSONFILES = "/Resources/Patterns/";
 
-        public static bool SavePatternJSON(PatternSettings pattern)
+        public static void SaveRoundToJSON(Round round, string namePattern)
+        {
+            // Generate json data
+            string jsonString = LitJson.JsonMapper.ToJson(round);
+
+            string root = Application.dataPath + PATHJSONFILES;
+
+            // Check directory
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
+
+            // Check path
+            string path = root + "Pattern_Round_" + round.RoundNumber + ".json";
+
+            if (!string.IsNullOrEmpty(namePattern))
+            {
+                path = root + namePattern + "_Round_" + round.RoundNumber + ".json";
+            }           
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (FileStream fs = File.Create(path))
+            {
+                byte[] info = new System.Text.UTF8Encoding(true).GetBytes(jsonString);
+                fs.Write(info, 0, info.Length);
+                fs.Close();
+            }
+        }
+
+       /* public static bool SavePatternJSON(PatternSettings pattern)
         {
             // Generate json data
             string jsonString = LitJson.JsonMapper.ToJson(pattern);
@@ -38,10 +72,10 @@ namespace CCounter
             }
 
             return true;
-        }
+        }*/
 
 
-        public static bool LoadMazeJSON(string namePattern, out PatternSettings pattenrData)
+       /* public static bool LoadMazeJSON(string namePattern, out PatternSettings pattenrData)
         {
             pattenrData = null;
             // Load data from resources
@@ -63,6 +97,6 @@ namespace CCounter
 
             return false;
 
-        }
+        }*/
     }
 }

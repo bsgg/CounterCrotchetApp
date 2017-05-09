@@ -8,7 +8,7 @@ namespace CCounter
     public class PatternSettingsUI : MonoBehaviour
     {
         [SerializeField]
-        private InputField m_NamePattern;
+        private InputField m_PatternName;
 
         [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
         [SerializeField] private Text m_CurrentTextRound;
@@ -40,11 +40,13 @@ namespace CCounter
              "Hdc" };
 
          private int m_StichSelected = 0;*/
+        [SerializeField]
+        private InputField m_RoundNumber;
 
         [SerializeField]
-        private InputField m_NumberRepsPerCell;
+        private InputField m_NumberRepeatsPerGroupStiches;
 
-        private Round m_CurrentRound;
+        //private Round m_CurrentRound;
         private PatternSettings m_PatterSettings;
 
         private void Start()
@@ -78,6 +80,15 @@ namespace CCounter
             m_CurrentTextRound.text = "Round 3 Stich(es):" + m_RoundSettingsUI.PrintStiches();
         }
 
+
+        public void OnSaveRound()
+        {
+            int numberRepeats = int.Parse(m_NumberRepeatsPerStich.text);
+            int roundNumber = int.Parse(m_RoundNumber.text);
+
+            Round round = m_RoundSettingsUI.CreateRound(numberRepeats, roundNumber);
+            CCFileUtil.SaveRoundToJSON(round, m_PatternName.text);
+        }
 
 
         /*public void Show()

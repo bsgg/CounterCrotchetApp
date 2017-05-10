@@ -49,7 +49,17 @@ namespace CCounter
             set { m_RoundNumber = value; }
         }
         private List<Stich> m_Stiches;
+        public List<Stich> Stiches
+        {
+            get { return m_Stiches; }
+            set { m_Stiches = value; }
+        }
         private List<Stich> m_AllRepeatsStiches;
+        public List<Stich> AllRepeatsStiches
+        {
+            get { return m_AllRepeatsStiches; }
+            set { m_AllRepeatsStiches = value; }
+        }
 
         public Round()
         {

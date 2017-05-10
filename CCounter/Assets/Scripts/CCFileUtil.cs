@@ -12,10 +12,35 @@ namespace CCounter
 
         public static void SaveRoundToJSON(Round round, string namePattern)
         {
-            // Generate json data
-            string jsonString = LitJson.JsonMapper.ToJson(round);
-
             string root = Application.dataPath + PATHJSONFILES;
+
+            string jsonString = JsonMapper.ToJson(round);
+
+
+            string jsonRound = "{\"RoundNumber\":1, \"Stiches\": [";
+
+            // Generate json data
+
+            for (int iSt = 0; iSt < round.Stiches.Count; iSt++)
+            {
+                string stichString = JsonMapper.ToJson(round.Stiches[iSt]);
+
+                jsonRound += stichString;
+
+            }
+
+            jsonRound += "],\"AllRepeatsStiches\": [";
+
+            for (int iSt = 0; iSt < round.AllRepeatsStiches.Count; iSt++)
+            {
+                string stichString = JsonMapper.ToJson(round.AllRepeatsStiches[iSt]);
+
+                jsonRound += stichString;
+
+            }
+            jsonRound += "]}";
+
+
 
             // Check directory
             if (!Directory.Exists(root))
@@ -38,7 +63,7 @@ namespace CCounter
 
             using (FileStream fs = File.Create(path))
             {
-                byte[] info = new System.Text.UTF8Encoding(true).GetBytes(jsonString);
+                byte[] info = new System.Text.UTF8Encoding(true).GetBytes(jsonRound);
                 fs.Write(info, 0, info.Length);
                 fs.Close();
             }

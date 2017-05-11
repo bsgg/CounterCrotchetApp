@@ -6,19 +6,7 @@ using UnityEngine.UI;
 namespace CCounter
 {
     public class RoundSettingsUI : MonoBehaviour
-    {
-        
-
-        string[] m_Stiches = new string[] {
-            "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
-            "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
-            "Half Double Crotchet" };
-
-        string[] m_StichesAbbreviations = new string[] {
-            "Mg", "Sl", "Sc", "Inc",
-            "Inv Inc", "Dec", "Inv Dec", "Dc",
-            "Hdc" };
-
+    { 
         [Header("Stich Type")]
         [SerializeField] private Dropdown m_StichType;
         [SerializeField] private InputField m_Repeats;
@@ -39,9 +27,9 @@ namespace CCounter
         {
             // Init Drowdown
             List<string> dropDownList = new List<string>();
-            for (int i = 0; i < m_Stiches.Length; i++)
+            for (int i = 0; i < PatternSettings.Stiches.Length; i++)
             {
-                dropDownList.Add(m_Stiches[i] + "(" + m_StichesAbbreviations[i] + ")");
+                dropDownList.Add(PatternSettings.Stiches[i] + "(" + PatternSettings.StichesAbbreviations[i] + ")");
             }
             m_StichType.AddOptions(dropDownList);
             Clear();
@@ -49,7 +37,6 @@ namespace CCounter
 
         public void OnValuStichTypeChange(int id)
         {
-            Debug.Log("OnValuStichTypeChange: " + id);
             m_StichSelected = id;
         }
 
@@ -59,64 +46,53 @@ namespace CCounter
 
             m_StichSelected = 0;
             m_StichType.value = m_StichSelected;
-            m_Repeats.text = "0";
-            m_SpecialRepeats.text = "0";
+            m_Repeats.text = "1";
+            m_SpecialRepeats.text = "1";
 
         }
 
         public void AddStich()
         {
             Stich stich = new Stich();
-            stich.NumberRepeats = int.Parse(m_Repeats.text);
-            stich.Abbr = m_StichesAbbreviations[m_StichSelected];
-            stich.Name = m_Stiches[m_StichSelected];
+
+            stich.IdStich = m_StichSelected;
+            stich.Abbr = PatternSettings.StichesAbbreviations[m_StichSelected];
+            stich.Name = PatternSettings.Stiches[m_StichSelected];
+
+            stich.NumberRepeats = 0;
+            int auxRepeats = 0;
+            if (int.TryParse(m_Repeats.text, out auxRepeats))
+            {
+                stich.NumberRepeats = auxRepeats;
+            }
+
             m_ListStiches.Add(stich);
 
+            // Remove stich selected
+            m_StichSelected = 0;
+            m_StichType.value = m_StichSelected;
+            m_Repeats.text = "1";
 
-
-            // Check reps for stich
-            /*int reps = int.Parse(m_Repeats.text);
-
-            // Add curent Stich
-            string currentS = m_StichesAbbreviations[m_StichSelected];
-
-            // Check reps
-            if (reps > 0)
-            {
-                if (m_StichSelected == 0)
-                {
-                    currentS = m_StichesAbbreviations[m_StichSelected] + " " + reps.ToString();
-                }
-                else
-                {
-                    currentS = reps.ToString() + " " + m_StichesAbbreviations[m_StichSelected];
-                }
-            }
-            m_ListStiches.Add(currentS);*/
         }
 
         public void AddSpecialStich()
         {
             Stich stich = new Stich();
-            stich.NumberRepeats = int.Parse(m_SpecialRepeats.text);
+            
+            stich.IdStich = 0;
             stich.Abbr = m_SpecialStich.text;
             stich.Name = m_SpecialStich.text;
+
+            stich.NumberRepeats = 0;
+            int auxRepeats = 0;
+            if (int.TryParse(m_SpecialRepeats.text, out auxRepeats))
+            {
+                stich.NumberRepeats = auxRepeats;
+            }
+
             m_ListStiches.Add(stich);
 
-
-            // Check reps for stich
-            /*int reps = int.Parse(m_SpecialRepeats.text);
-
-            string stichTest = string.Empty;            
-            // Check reps
-            if (reps > 0)
-            {
-                stichTest = reps.ToString() + " " + m_SpecialStich.text;
-            }else
-            {
-                stichTest = m_SpecialStich.text;
-            }
-            m_ListStiches.Add(stichTest);*/
+            m_SpecialRepeats.text = "1";
         }
 
         public string PrintStiches()
@@ -147,6 +123,7 @@ namespace CCounter
         public Round CreateRound(int numberRepeatsPerStich, int roundNumber)
         {
             Round round = new Round();
+            round.RepeatsPerGroupStiches = numberRepeatsPerStich;
             round.RoundNumber = roundNumber;
 
             if ((m_ListStiches != null) && (m_ListStiches.Count > 0))
@@ -159,14 +136,19 @@ namespace CCounter
 
                 // Generate all repeats for list of stiches
                 for (int iRepeat = 0; iRepeat < numberRepeatsPerStich; iRepeat++)
-                {                   
+                {
                     for (int i = 0; i < m_ListStiches.Count; i++)
                     {
                         // Fill the repetitions
                         round.AddStichesAllRepeats(m_ListStiches[i]);
                     }
                 }
+
+                // Remove list stiches
+                m_ListStiches.Clear();
+                m_ListStiches = new List<Stich>();
             }
+
             return round;
         }
     }

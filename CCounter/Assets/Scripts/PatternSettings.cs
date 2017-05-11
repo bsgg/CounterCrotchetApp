@@ -3,8 +3,28 @@ using System.Collections.Generic;
 
 namespace CCounter
 {
+    public class PatternSettings
+    {
+        public static string[] Stiches = new string[] {
+            "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
+            "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
+            "Half Double Crotchet" };
+
+        public static string[] StichesAbbreviations = new string[] {
+            "Mg", "Sl", "Sc", "Inc",
+            "Inv Inc", "Dec", "Inv Dec", "Dc",
+            "Hdc" };
+    }
+
     public class Stich
     {
+        private int  m_IdStich;
+        public int IdStich
+        {
+            get { return m_IdStich; }
+            set { m_IdStich = value; }
+        }
+
         private string m_Abbr;
         public string Abbr
         {
@@ -33,6 +53,7 @@ namespace CCounter
 
         public Stich()
         {
+            m_IdStich = -1;
             m_Abbr = "";
             m_Name = "";
             m_NumberRepeats = 0;
@@ -42,12 +63,27 @@ namespace CCounter
 
     public class Round
     {
+        private string m_NamePattern;
+        public string NamePattern
+        {
+            get { return m_NamePattern; }
+            set { m_NamePattern = value; }
+        }
+
         private int m_RoundNumber;
         public int RoundNumber
         {
             get { return m_RoundNumber; }
             set { m_RoundNumber = value; }
         }
+
+        private int m_RepeatsPerGroupStiches;
+        public int RepeatsPerGroupStiches
+        {
+            get { return m_RepeatsPerGroupStiches; }
+            set { m_RepeatsPerGroupStiches = value; }
+        }
+
         private List<Stich> m_Stiches;
         public List<Stich> Stiches
         {
@@ -80,37 +116,13 @@ namespace CCounter
 
         public void Clear()
         {
-            
-        }
-    }
+            m_RoundNumber = 0;
+            m_Stiches.Clear();
+            m_Stiches = new List<Stich>();
 
-    public class PatternSettings 
-    {
-        private string m_Name = "";
-        public string Name
-        {
-            get { return m_Name; }
-            set { m_Name = value; }
+            m_AllRepeatsStiches.Clear();
+            m_AllRepeatsStiches = new List<Stich>();
         }
-        private List<Round> m_Rounds;
-
-        public PatternSettings()
-        {
-            m_Rounds = new List<Round>();
-        }
-
-        public void AddRound(Round round)
-        {
-            m_Rounds.Add(round);
-        }
-
-        public void RemoveLastRound()
-        {
-            if (m_Rounds != null && m_Rounds.Count > 0)
-            {
-                m_Rounds[m_Rounds.Count].Clear();
-                m_Rounds.RemoveAt(m_Rounds.Count);
-            }
-        }
-    }
+    }    
+    
 }

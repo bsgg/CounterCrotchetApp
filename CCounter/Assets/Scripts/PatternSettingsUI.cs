@@ -7,65 +7,111 @@ namespace CCounter
 {
     public class PatternSettingsUI : MonoBehaviour
     {
-        [SerializeField]
-        private InputField m_PatternName;
-
+        [SerializeField] private InputField m_PatternName;
         [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
         [SerializeField] private Text m_CurrentTextRound;
         [SerializeField] private InputField m_RoundNumber;
-
         [SerializeField] private InputField m_RepeatsPerGroupStiches;
 
-        //private Round m_CurrentRound;
-        private PatternSettings m_PatterSettings;
+        private Round m_CurrentRound;
+        private int m_CurrentRoundNumber = 1;
+
+        public int RepeatsPerGroupStiches
+        {
+            get
+            {
+                int nRepeatsPerGroup = 1;
+                int auxNRepeats = 0;
+                if (int.TryParse(m_RepeatsPerGroupStiches.text, out auxNRepeats))
+                {
+                    nRepeatsPerGroup = auxNRepeats;
+                }
+
+                return nRepeatsPerGroup;
+            }
+            set
+            {
+                if (value <= 0)
+                {
+                    m_RepeatsPerGroupStiches.text = "1";
+                }
+                else
+                {
+                    m_RepeatsPerGroupStiches.text = value.ToString();
+                }
+            }
+        }
+
 
         private void Start()
         {
-            m_PatterSettings = new PatternSettings();
             m_RoundSettingsUI.Init();
 
-            m_RoundNumber.text = "1";
+            m_CurrentRoundNumber = 1;
+            m_RoundNumber.text = m_CurrentRoundNumber.ToString();
             m_RepeatsPerGroupStiches.text = "1";
-
-            int roundNumber = 0;
-            m_CurrentTextRound.text = "Round " + roundNumber + " Stich(es)";
+            m_CurrentTextRound.text = "";
         }
 
         public void OnAddStich()
         {
             m_RoundSettingsUI.AddStich();
             int roundNumber = int.Parse(m_RoundNumber.text);
-            m_CurrentTextRound.text = "Round " + roundNumber + " Stich(es):\n" + m_RoundSettingsUI.PrintStiches();
+            m_CurrentTextRound.text = RepeatsPerGroupStiches.ToString() + " Repeat(s) For: \n" + m_RoundSettingsUI.PrintStiches();
         }
 
         public void OnAddSpecialStich()
         {
             m_RoundSettingsUI.AddSpecialStich();
             int roundNumber = int.Parse(m_RoundNumber.text);
-            m_CurrentTextRound.text = "Round " + roundNumber + " Stich(es):\n" + m_RoundSettingsUI.PrintStiches();
-        }
-
+            m_CurrentTextRound.text = RepeatsPerGroupStiches.ToString() + " Repeat(s) For: \n"  + m_RoundSettingsUI.PrintStiches();
+        }       
 
         public void OnSaveRound()
         {
-            int nRepeatsPerGroup = 1;
-            int auxNRepeats = 0;
-            if (int.TryParse(m_RepeatsPerGroupStiches.text, out auxNRepeats))
-            {
-                nRepeatsPerGroup = auxNRepeats;
-            }
+            int nRepeatsPerGroup = RepeatsPerGroupStiches;            
 
-            int roundNumber = 1;
             int auxRoundN = 0;
             if (int.TryParse(m_RoundNumber.text, out auxRoundN))
             {
-                roundNumber = auxRoundN;
+                m_CurrentRoundNumber = auxRoundN;
             }
-            Round round = m_RoundSettingsUI.CreateRound(nRepeatsPerGroup, roundNumber);
 
-            CCFileUtil.SaveRoundToJSON(round, m_PatternName.text);
+            m_CurrentRound = m_RoundSettingsUI.CreateRound(nRepeatsPerGroup, m_CurrentRoundNumber);
+            if (!string.IsNullOrEmpty(m_PatternName.text))
+            {
+                m_CurrentRound.NamePattern = m_PatternName.text;
+            }else
+            {
+                m_CurrentRound.NamePattern = "Pattern";
+            }
+            
+
+            CCFileUtil.SaveRoundToJSON(m_CurrentRound);
+
+            m_CurrentTextRound.text = "";
+            RepeatsPerGroupStiches = 1;
+
+            m_CurrentRoundNumber += 1;
+            m_RoundNumber.text = m_CurrentRoundNumber.ToString();
+            
 
             Debug.Log("SAVE ROUND TO JSON");
+        }
+
+        public void OnRemoveRound()
+        {
+            if (m_CurrentRound != null)
+            {
+                m_CurrentRound.Clear();
+            }
+
+            m_CurrentRoundNumber -= 1;
+            if (m_CurrentRoundNumber <= 0)
+            {
+                m_CurrentRoundNumber = 1;
+            }
+            m_RoundNumber.text = m_CurrentRoundNumber.ToString();
         }
         
 	}

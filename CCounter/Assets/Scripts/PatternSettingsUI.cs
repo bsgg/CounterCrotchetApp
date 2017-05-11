@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 namespace CCounter
 {
-    public class PatternSettingsUI : MonoBehaviour
+    public class PatternSettingsUI : UIBase
     {
+
         [SerializeField] private InputField m_PatternName;
         [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
         [SerializeField] private Text m_CurrentTextRound;
@@ -113,6 +114,9 @@ namespace CCounter
             }
             m_RoundNumber.text = m_CurrentRoundNumber.ToString();
         }
+
+
+         
         
 	}
 }

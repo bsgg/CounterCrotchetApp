@@ -1,0 +1,23 @@
+{
+  "NamePattern": "Pattern",
+  "RoundNumber": 3,
+  "RepeatsPerGroupStiches": 1,
+  "Stiches": [
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 1,
+      "IsTickedOff": false
+    }
+  ],
+  "AllRepeatsStiches": [
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 1,
+      "IsTickedOff": false
+    }
+  ]
+}

@@ -63,6 +63,25 @@ namespace ScrollList
             }
         }
 
+        public int NumberElements()
+        {
+            if (m_ListElements != null)
+            {
+                return m_ListElements.Count;
+            }
+            return 0;
+        }
+
+        public GameObject GetElement(int index)
+        {
+            if (m_ListElements != null && index < m_ListElements.Count)
+            {
+                return m_ListElements[index];
+            }
+
+            return null;
+        }
+
         public void DelegateButtonPress(int id)
         {
             if (OnButtonPress != null)

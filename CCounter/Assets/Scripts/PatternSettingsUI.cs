@@ -48,6 +48,7 @@ namespace CCounter
         {
             m_RoundSettingsUI.Init();
 
+            m_CurrentRound = new Round();
             m_CurrentRoundNumber = 1;
             m_RoundNumber.text = m_CurrentRoundNumber.ToString();
             m_RepeatsPerGroupStiches.text = "1";
@@ -66,11 +67,12 @@ namespace CCounter
             m_RoundSettingsUI.AddSpecialStich();
             int roundNumber = int.Parse(m_RoundNumber.text);
             m_CurrentTextRound.text = RepeatsPerGroupStiches.ToString() + " Repeat(s) For: \n"  + m_RoundSettingsUI.PrintStiches();
-        }       
+        }
 
         public void OnSaveRound()
         {
-            int nRepeatsPerGroup = RepeatsPerGroupStiches;            
+            
+            int nRepeatsPerGroup = RepeatsPerGroupStiches;
 
             int auxRoundN = 0;
             if (int.TryParse(m_RoundNumber.text, out auxRoundN))
@@ -82,22 +84,31 @@ namespace CCounter
             if (!string.IsNullOrEmpty(m_PatternName.text))
             {
                 m_CurrentRound.NamePattern = m_PatternName.text;
-            }else
+            }
+            else
             {
                 m_CurrentRound.NamePattern = "Pattern";
             }
+
+            if (m_CurrentRound.Stiches.Count > 0)
+            {
+                CCFileUtil.SaveRoundToJSON(m_CurrentRound);
+                m_CurrentTextRound.text = "";
+                RepeatsPerGroupStiches = 1;
+
+                m_CurrentRoundNumber += 1;
+                m_RoundNumber.text = m_CurrentRoundNumber.ToString();
+                Debug.Log("SAVE ROUND TO JSON");
+            }else
+            {
+                m_CurrentTextRound.text = "Add some stiches, It was not possible to generate JSON data";
+            }
+
+
+                
+
+               
             
-
-            CCFileUtil.SaveRoundToJSON(m_CurrentRound);
-
-            m_CurrentTextRound.text = "";
-            RepeatsPerGroupStiches = 1;
-
-            m_CurrentRoundNumber += 1;
-            m_RoundNumber.text = m_CurrentRoundNumber.ToString();
-            
-
-            Debug.Log("SAVE ROUND TO JSON");
         }
 
         public void OnRemoveRound()

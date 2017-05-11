@@ -75,6 +75,9 @@ namespace CCounter
             if ((m_RoundList != null) && (id < m_RoundList.Count))
             {
                 Debug.Log("ROUND...." + id);
+
+                AppController.Instance.OnShowRoundCounter(m_RoundList[id]);
+
             }
         }
 

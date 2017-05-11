@@ -6,8 +6,9 @@ namespace ScrollList
 {
     public class MenuButton : MonoBehaviour
     {
-        [SerializeField] private Text           m_LabelTitleButton;
-        [SerializeField] private Button         m_ButtonComponent;
+        [SerializeField] protected Text           m_LabelTitleButton;
+        [SerializeField]
+        protected Button         m_ButtonComponent;
         private int                             m_IdButton;
 
         public delegate void OnMenuButtonPress(int index);

@@ -121,9 +121,6 @@ namespace CCounter
             }
             m_RoundNumber.text = m_CurrentRoundNumber.ToString();
         }
-
-
-         
         
 	}
 }

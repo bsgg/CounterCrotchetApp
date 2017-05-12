@@ -20,24 +20,19 @@ namespace CCounter
             base.Init();
 
             m_CurrentRound = new Round();
+        }       
+
+        public override void Hide()
+        {            
+            m_CounterRoundListScroll.OnButtonPress -= OnButtonMenuPress;
+            base.Hide();
         }
 
-        public void SetRound(Round round)
+        public void SetRound( Round round)
         {
-            if (m_CurrentRound != null)
-            {
-                m_CurrentRound.Clear();
-            }
-
             m_CurrentRound = round;
-        }
-
-
-        public override void Show()
-        {
-            base.Show();
-
             m_CurrentCounter = 0;
+
             if (m_CurrentRound != null)
             {
                 m_RoundDescription.text = "R" + m_CurrentRound.RoundNumber.ToString() + ":";
@@ -66,10 +61,9 @@ namespace CCounter
 
                 m_CounterRoundListScroll.InitScroll(listStiches);
                 m_CounterRoundListScroll.OnButtonPress += OnButtonMenuPress;
-
             }
-
         }
+
 
         private void OnButtonMenuPress(int id)
         {
@@ -89,13 +83,37 @@ namespace CCounter
 
         void Update()
         {
-            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return))
+            if (m_CurrentRound != null)
             {
-                if (m_CurrentCounter < m_CounterRoundListScroll.NumberElements())
+                if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return))
                 {
-                    OnButtonMenuPress(m_CurrentCounter);
-                    m_CurrentCounter++;
+                    if (m_CurrentCounter < m_CounterRoundListScroll.NumberElements())
+                    {
+                        OnButtonMenuPress(m_CurrentCounter);
+                        m_CurrentCounter++;
+                    }
+                    else
+                    {
+                        OnNextRound();
+                    }
                 }
+            }
+        }
+
+        public void OnNextRound()
+        {
+            // Last  group, check round and get next one
+            AppController.Instance.FinishCurrentRoundInList();
+
+            Round round = AppController.Instance.GetNextRoundInList();
+
+            if (round != null)
+            {
+                SetRound(round);
+            }
+            else
+            {
+                Debug.Log("[ROUNDCOUNTERUI] NO MORE ROUNDS");
             }
         }
 

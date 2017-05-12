@@ -44,11 +44,13 @@ namespace CCounter
 
         [SerializeField]
         private List<Round> m_RoundList;
+        private int m_CurrentRoundIDSelected;
 
         private void Start()
         {
             Init();
             m_RoundCounterUI.Init();
+            m_CurrentRoundIDSelected = 0;
             SelectMenu(ETYPEMENU.MAINMENU);            
         }
 
@@ -81,6 +83,7 @@ namespace CCounter
 
             return null;
         }
+        
 
         public List<string> GetListRounds()
         {
@@ -172,11 +175,33 @@ namespace CCounter
             SelectMenu(ETYPEMENU.ROUNDSELECTOR);
         }
 
-        public void OnShowRoundCounter(int id)
+        public void OnShowRoundCounter(int idRound)
         {
-            m_RoundCounterUI.SetRound(GetRoundById(id));
+            m_CurrentRoundIDSelected = idRound;
+            m_RoundCounterUI.SetRound(GetRoundById(m_CurrentRoundIDSelected));
 
             SelectMenu(ETYPEMENU.ROUNDCOUNTER);            
+        }        
+
+        public void FinishCurrentRoundInList()
+        {
+            Round round = GetRoundById(m_CurrentRoundIDSelected);
+
+            if (round != null)
+            {
+                round.IsTickedOff = true;
+                CCFileUtil.SaveRoundToJSON(round);
+            }
+        }
+
+        public Round GetNextRoundInList()
+        {
+            m_CurrentRoundIDSelected++;
+            if (m_CurrentRoundIDSelected < m_RoundList.Count)
+            {
+                return m_RoundList[m_CurrentRoundIDSelected];
+            }
+            return null;
         }
 
     }

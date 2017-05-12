@@ -43,7 +43,6 @@ namespace CCounter
             }
         }
 
-
         private void Start()
         {
             m_RoundSettingsUI.Init();
@@ -70,8 +69,7 @@ namespace CCounter
         }
 
         public void OnSaveRound()
-        {
-            
+        {            
             int nRepeatsPerGroup = RepeatsPerGroupStiches;
 
             int auxRoundN = 0;
@@ -91,24 +89,22 @@ namespace CCounter
             }
 
             if (m_CurrentRound.Stiches.Count > 0)
-            {
-                CCFileUtil.SaveRoundToJSON(m_CurrentRound);
+            { 
+
+                // Add round to  list of rounds
+                AppController.Instance.AddRound(m_CurrentRound);
+
+                m_CurrentRound.Clear();
                 m_CurrentTextRound.text = "";
                 RepeatsPerGroupStiches = 1;
 
                 m_CurrentRoundNumber += 1;
                 m_RoundNumber.text = m_CurrentRoundNumber.ToString();
-                Debug.Log("SAVE ROUND TO JSON");
+                
             }else
             {
                 m_CurrentTextRound.text = "Add some stiches, It was not possible to generate JSON data";
             }
-
-
-                
-
-               
-            
         }
 
         public void OnRemoveRound()

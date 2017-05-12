@@ -81,6 +81,7 @@ namespace CCounter
                 rounData = JsonMapper.ToObject<Round>(json_string);
                 return true;
             }
+
             return false;
         }
 

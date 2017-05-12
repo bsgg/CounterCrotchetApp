@@ -1,0 +1,94 @@
+{
+  "NamePattern": "ElephantTruck",
+  "RoundNumber": 2,
+  "RepeatsPerGroupStiches": 6,
+  "Stiches": [
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    }
+  ],
+  "AllRepeatsStiches": [
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    },
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    },
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    },
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    },
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    },
+    {
+      "IdStich": 3,
+      "Abbr": "Inc",
+      "Name": "Increasec",
+      "NumberRepeats": 1
+    },
+    {
+      "IdStich": 2,
+      "Abbr": "Sc",
+      "Name": "Single Crotchet",
+      "NumberRepeats": 6
+    }
+  ],
+  "IsTickedOff": false
+}

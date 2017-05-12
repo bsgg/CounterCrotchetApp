@@ -13,14 +13,25 @@ namespace CCounter
         [SerializeField] private ScrollPanelUI m_CounterRoundListScroll;
 
         private int m_CurrentCounter = 0;
-
-
         private Round m_CurrentRound;
-        public Round CurrentRound
+       
+        public override void Init()
         {
-            get { return m_CurrentRound; }
-            set { m_CurrentRound = value; }
+            base.Init();
+
+            m_CurrentRound = new Round();
         }
+
+        public void SetRound(Round round)
+        {
+            if (m_CurrentRound != null)
+            {
+                m_CurrentRound.Clear();
+            }
+
+            m_CurrentRound = round;
+        }
+
 
         public override void Show()
         {

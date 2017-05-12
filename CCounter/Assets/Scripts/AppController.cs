@@ -42,9 +42,81 @@ namespace CCounter
         [SerializeField]
         private RounCounterUI m_RoundCounterUI;
 
+        [SerializeField]
+        private List<Round> m_RoundList;
+
         private void Start()
         {
-            SelectMenu(ETYPEMENU.MAINMENU);
+            Init();
+            m_RoundCounterUI.Init();
+            SelectMenu(ETYPEMENU.MAINMENU);            
+        }
+
+        private void Init()
+        {
+            m_RoundList = new List<Round>();
+
+            // Get current list of rounds
+            List<string> listFiles = CCFileUtil.ListJSONFiles();
+            for (int i = 0; i < listFiles.Count; i++)
+            {
+                Round round = new Round();
+                if (CCFileUtil.LoadRoundJSON(listFiles[i], out round))
+                {
+                    m_RoundList.Add(round);
+                }
+                else
+                {
+                    Debug.Log("[APPController] It was not possible to get the round");
+                }
+            }
+        }
+
+        public Round GetRoundById(int id)
+        {
+            if (m_RoundList != null && id < m_RoundList.Count)
+            {
+                return m_RoundList[id];
+            }
+
+            return null;
+        }
+
+        public List<string> GetListRounds()
+        {
+            List<string> lTitles = new List<string>();
+            if (m_RoundList != null)
+            {
+                for (int i=0; i< m_RoundList.Count; i++)
+                {
+                    string titleRound = "R" + m_RoundList[i].RoundNumber + ": ";
+                    for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
+                    {
+                        titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
+
+                        if (iStich < m_RoundList[i].Stiches.Count - 1)
+                        {
+                            titleRound += " , ";
+                        }
+                    }
+
+                    if (m_RoundList[i].RepeatsPerGroupStiches > 1)
+                    {
+                        titleRound += "  - Repeat x " + m_RoundList[i].RepeatsPerGroupStiches.ToString();
+                    }
+
+                    lTitles.Add(titleRound);
+                }
+            }
+
+            return lTitles;
+        }
+
+        public void AddRound(Round round)
+        {            
+            CCFileUtil.SaveRoundToJSON(round);
+            m_RoundList.Add(round);
+            Debug.Log("[APPController] New Round added to JSON");
         }
 
         private void SelectMenu(ETYPEMENU menu)
@@ -100,9 +172,9 @@ namespace CCounter
             SelectMenu(ETYPEMENU.ROUNDSELECTOR);
         }
 
-        public void OnShowRoundCounter(Round round)
-        {            
-            m_RoundCounterUI.CurrentRound = round;
+        public void OnShowRoundCounter(int id)
+        {
+            m_RoundCounterUI.SetRound(GetRoundById(id));
 
             SelectMenu(ETYPEMENU.ROUNDCOUNTER);            
         }

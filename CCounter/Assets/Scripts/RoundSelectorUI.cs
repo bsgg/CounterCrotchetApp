@@ -11,17 +11,17 @@ namespace CCounter
 
         [SerializeField] private ScrollPanelUI m_RoundListScroll;
 
-        public ScrollPanelUI ScrollMenu
+        /*public ScrollPanelUI ScrollMenu
         {
             get { return m_RoundListScroll; }
             set { m_RoundListScroll = value; }
-        }
+        }*/
 
-        private List<Round> m_RoundList;
+       // private List<Round> m_RoundList;
 
         public override void Show()
         {
-            List<string> listFiles = CCFileUtil.ListJSONFiles();
+            /*List<string> listFiles = CCFileUtil.ListJSONFiles();
 
             m_RoundList = new List<Round>();
             List<string> listRounds = new List<string>();
@@ -51,9 +51,10 @@ namespace CCounter
 
                     listRounds.Add(titleRound);
                 }               
-            }
+            }*/
 
-            m_RoundListScroll.InitScroll(listRounds);
+
+             m_RoundListScroll.InitScroll(AppController.Instance.GetListRounds());
             m_RoundListScroll.OnButtonPress += OnButtonMenuPress;
 
             base.Show();
@@ -72,13 +73,15 @@ namespace CCounter
 
         private void OnButtonMenuPress(int id)
         {
-            if ((m_RoundList != null) && (id < m_RoundList.Count))
+            AppController.Instance.OnShowRoundCounter(id);
+
+            /*if ((m_RoundList != null) && (id < m_RoundList.Count))
             {
                 Debug.Log("ROUND...." + id);
 
                 AppController.Instance.OnShowRoundCounter(m_RoundList[id]);
 
-            }
+            }*/
         }
 
     }

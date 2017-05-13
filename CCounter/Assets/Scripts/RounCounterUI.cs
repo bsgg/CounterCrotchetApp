@@ -92,10 +92,10 @@ namespace CCounter
                         OnButtonMenuPress(m_CurrentCounter);
                         m_CurrentCounter++;
                     }
-                    else
+                    /*else
                     {
                         OnNextRound();
-                    }
+                    }*/
                 }
             }
         }

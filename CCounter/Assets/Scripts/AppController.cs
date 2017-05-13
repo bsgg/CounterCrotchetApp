@@ -60,6 +60,10 @@ namespace CCounter
 
             // Get current list of rounds
             List<string> listFiles = CCFileUtil.ListJSONFiles();
+
+            DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
+
+            int nErrorRounds = 0;
             for (int i = 0; i < listFiles.Count; i++)
             {
                 Round round = new Round();
@@ -69,8 +73,15 @@ namespace CCounter
                 }
                 else
                 {
+                    nErrorRounds++;
+                    
                     Debug.Log("[APPController] It was not possible to get the round");
                 }
+            }
+
+            if (nErrorRounds > 0)
+            {
+                DebugManager.Instance.Log("Errors(" + nErrorRounds + ")\n");
             }
         }
 
@@ -92,7 +103,7 @@ namespace CCounter
             {
                 for (int i=0; i< m_RoundList.Count; i++)
                 {
-                    string titleRound = "R" + m_RoundList[i].RoundNumber + ": ";
+                    string titleRound = m_RoundList[i].NamePattern + " - R" + m_RoundList[i].RoundNumber + ": ";
                     for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
                     {
                         titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;

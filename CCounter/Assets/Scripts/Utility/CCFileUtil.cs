@@ -24,7 +24,7 @@ namespace CCounter
             }
 
             // Check path
-            string path = root + round.NamePattern + "_Round_" + round.RoundNumber + ".json";       
+            string path = root + round.RoundNumber + "_" + round.NamePattern + ".json";       
 
             if (File.Exists(path))
             {
@@ -54,6 +54,7 @@ namespace CCounter
                     for (int i = 0; i < auxFiles.Length; i++)
                     {
                         string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
+                        filename.Trim();
                         lfiles.Add(filename);
                     }
                 }
@@ -71,6 +72,7 @@ namespace CCounter
             TextAsset text_asset = (TextAsset)Resources.Load(pathFile, typeof(TextAsset));
             if (text_asset == null)
             {
+                DebugManager.Instance.Log("FileNotFound: " + pathFile + "\n");
                 Debug.Log("ERROR: Could not find file: Assets/Resources/" + pathFile);
                 return false;
             }
@@ -80,6 +82,9 @@ namespace CCounter
             {
                 rounData = JsonMapper.ToObject<Round>(json_string);
                 return true;
+            }else
+            {
+                DebugManager.Instance.Log("JsonFile Null\n");
             }
 
             return false;

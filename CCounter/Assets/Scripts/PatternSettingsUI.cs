@@ -94,7 +94,7 @@ namespace CCounter
                 // Add round to  list of rounds
                 AppController.Instance.AddRound(m_CurrentRound);
 
-                m_CurrentRound.Clear();
+                //m_CurrentRound.Clear();
                 m_CurrentTextRound.text = "";
                 RepeatsPerGroupStiches = 1;
 
@@ -106,21 +106,5 @@ namespace CCounter
                 m_CurrentTextRound.text = "Add some stiches, It was not possible to generate JSON data";
             }
         }
-
-        public void OnRemoveRound()
-        {
-            if (m_CurrentRound != null)
-            {
-                m_CurrentRound.Clear();
-            }
-
-            m_CurrentRoundNumber -= 1;
-            if (m_CurrentRoundNumber <= 0)
-            {
-                m_CurrentRoundNumber = 1;
-            }
-            m_RoundNumber.text = m_CurrentRoundNumber.ToString();
-        }
-        
 	}
 }

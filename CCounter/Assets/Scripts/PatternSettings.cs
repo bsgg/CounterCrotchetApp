@@ -60,18 +60,7 @@ namespace CCounter
         {
             AllRepeatsStiches.Add(stich);
         }
-
-        public void Clear()
-        {
-            RoundNumber = 0;
-            Stiches.Clear();
-            Stiches = new List<Stich>();
-
-            IsTickedOff = false;
-
-            AllRepeatsStiches.Clear();
-            AllRepeatsStiches = new List<Stich>();
-        }
+        
     }    
     
 }

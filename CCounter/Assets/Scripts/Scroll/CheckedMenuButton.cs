@@ -16,7 +16,7 @@ namespace ScrollList
 
         private void Start()
         {
-            UnCheck();
+            //UnCheck();
         }
 
         public void Check()

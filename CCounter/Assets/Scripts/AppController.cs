@@ -94,7 +94,19 @@ namespace CCounter
 
             return null;
         }
-        
+
+        public int NumberRounds
+        {
+            get
+            {
+                if (m_RoundList != null)
+                {
+                    return m_RoundList.Count;
+                }
+                return 0;
+            }
+        }
+
 
         public List<string> GetListRounds()
         {

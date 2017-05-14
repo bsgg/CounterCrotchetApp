@@ -66,26 +66,53 @@ namespace CCounter
         public static bool LoadRoundJSON(string fileName, out Round rounData)
         {
             rounData = null;
-            // Load data from resources
-            string pathFile = "Patterns/" + fileName;
 
-            TextAsset text_asset = (TextAsset)Resources.Load(pathFile, typeof(TextAsset));
-            if (text_asset == null)
+            string pathFile = Application.dataPath + PATHJSONFILES + fileName + ".json";
+            if (!File.Exists(pathFile))
             {
                 DebugManager.Instance.Log("FileNotFound: " + pathFile + "\n");
-                Debug.Log("ERROR: Could not find file: Assets/Resources/" + pathFile);
-                return false;
+            }
+            else
+            {
+                DebugManager.Instance.Log("File: " + pathFile + "\n");
+                string jsonString = File.ReadAllText(pathFile);
+                if (!string.IsNullOrEmpty(jsonString))
+                {
+                    rounData = JsonMapper.ToObject<Round>(jsonString);
+                    return true;
+
+                }else
+                {
+                    DebugManager.Instance.Log("jsonString is null or empty\n");
+                }
             }
 
-            string json_string = text_asset.ToString();
-            if (!string.IsNullOrEmpty(json_string))
-            {
-                rounData = JsonMapper.ToObject<Round>(json_string);
-                return true;
-            }else
-            {
-                DebugManager.Instance.Log("JsonFile Null\n");
-            }
+            return false;
+
+
+            // Load data from resources
+            //string pathFile = "Patterns/" + fileName;
+
+
+
+
+            /*TextAsset text_asset = (TextAsset)Resources.Load(pathFile, typeof(TextAsset));
+                    if (text_asset == null)
+                    {
+                        DebugManager.Instance.Log("FileNotFound: " + pathFile + "\n");
+                        Debug.Log("ERROR: Could not find file: Assets/Resources/" + pathFile);
+                        return false;
+                    }
+
+                    //string json_string = text_asset.ToString();
+                    if (!string.IsNullOrEmpty(json_string))
+                {
+                    rounData = JsonMapper.ToObject<Round>(json_string);
+                    return true;
+                }else
+                {
+                    DebugManager.Instance.Log("JsonFile Null\n");
+                }*/
 
             return false;
         }

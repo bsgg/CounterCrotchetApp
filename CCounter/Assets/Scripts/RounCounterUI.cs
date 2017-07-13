@@ -37,9 +37,12 @@ namespace CCounter
             {
                 m_RoundDescription.text = "R" + m_CurrentRound.RoundNumber.ToString() + ":";
 
+                int numberStiches = 0;
                 for (int iStich = 0; iStich < m_CurrentRound.Stiches.Count; iStich++)
                 {
                     m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
+
+                    numberStiches += m_CurrentRound.Stiches[iStich].NumberRepeats;
 
                     if (iStich < m_CurrentRound.Stiches.Count - 1)
                     {
@@ -47,12 +50,17 @@ namespace CCounter
                     }
                 }
 
+                numberStiches *= m_CurrentRound.RepeatsPerGroupStiches;
+
                 if (m_CurrentRound.RepeatsPerGroupStiches > 1)
                 {
                     m_RoundDescription.text += "  - Repeat x " + m_CurrentRound.RepeatsPerGroupStiches.ToString();
                 }
+                m_RoundDescription.text += " (" + numberStiches + " stiches)";
 
-                List<string> listStiches = new List<string>();
+               // Add number stiches 
+
+                List <string> listStiches = new List<string>();
                 for (int iStich = 0; iStich < m_CurrentRound.AllRepeatsStiches.Count; iStich++)
                 {
                     string stich = m_CurrentRound.AllRepeatsStiches[iStich].NumberRepeats + " " + m_CurrentRound.AllRepeatsStiches[iStich].Abbr.ToString();

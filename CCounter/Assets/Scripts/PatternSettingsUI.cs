@@ -106,5 +106,10 @@ namespace CCounter
                 m_CurrentTextRound.text = "Add some stiches, It was not possible to generate JSON data";
             }
         }
+
+        public void OnDeleteRound()
+        {
+            m_RoundSettingsUI.RemoveStiches();
+        }
 	}
 }

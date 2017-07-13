@@ -95,6 +95,15 @@ namespace CCounter
             m_SpecialRepeats.text = "1";
         }
 
+        public void RemoveStiches()
+        {
+            m_ListStiches.Clear();
+            m_ListStiches = new List<Stich>();
+            m_SpecialRepeats.text = "1";
+            m_Repeats.text = "1";
+
+        }
+
         public string PrintStiches()
         {
             string printS = string.Empty;

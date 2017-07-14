@@ -183,7 +183,7 @@ namespace CCounter
             }
         }
 
-        public void OnAddNewRound()
+        public void OnAddNewPatternPart()
         {
             SelectMenu(ETYPEMENU.PATTERNSETTINGS);
         }

@@ -8,6 +8,23 @@ namespace CCounter
     public class PatternSettingsUI : UIBase
     {
 
+        [Header ("PatternSettingsUI")]
+        [SerializeField]  private PartPatternSettings m_PartSettings;
+
+
+        public override void Show()
+        {
+            base.Show();
+            m_PartSettings.Show();
+        }
+
+
+        public void OnAcceptPartSettings()
+        {
+            m_PartSettings.Hide();
+        }
+
+
         [SerializeField] private InputField m_PatternName;
         [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
         [SerializeField] private Text m_CurrentTextRound;
@@ -96,7 +113,7 @@ namespace CCounter
 
                 //m_CurrentRound.Clear();
                 m_CurrentTextRound.text = "";
-                RepeatsPerGroupStiches = 1;
+                //RepeatsPerGroupStiches = 1;
 
                 m_CurrentRoundNumber += 1;
                 m_RoundNumber.text = m_CurrentRoundNumber.ToString();
@@ -110,6 +127,7 @@ namespace CCounter
         public void OnDeleteRound()
         {
             m_RoundSettingsUI.RemoveStiches();
+            m_CurrentTextRound.text = "";
         }
 	}
 }

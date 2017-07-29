@@ -37,12 +37,16 @@ namespace CCounter
             {
                 m_RoundDescription.text = "R" + m_CurrentRound.RoundNumber.ToString() + ":";
 
-                int numberStiches = 0;
+                //int numberStiches = 0;
                 for (int iStich = 0; iStich < m_CurrentRound.Stiches.Count; iStich++)
                 {
-                    m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
-
-                    numberStiches += m_CurrentRound.Stiches[iStich].NumberRepeats;
+                    if (m_CurrentRound.Stiches[iStich].SpecialStich && !m_CurrentRound.Stiches[iStich].CountAsStich)
+                    {
+                        m_RoundDescription.text += " " + m_CurrentRound.Stiches[iStich].Name;
+                    }else
+                    {
+                        m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
+                    }
 
                     if (iStich < m_CurrentRound.Stiches.Count - 1)
                     {
@@ -50,20 +54,25 @@ namespace CCounter
                     }
                 }
 
-                numberStiches *= m_CurrentRound.Repeats;
-
                 if (m_CurrentRound.Repeats > 1)
                 {
                     m_RoundDescription.text += "  - Repeat x " + m_CurrentRound.Repeats.ToString();
                 }
-                m_RoundDescription.text += " (" + numberStiches + " stiches)";
+                m_RoundDescription.text += " (" + round.TotalNumberStiches + " stiches)";
 
                // Add number stiches 
-
                 List <string> listStiches = new List<string>();
                 for (int iStich = 0; iStich < m_CurrentRound.AllRepeatsStiches.Count; iStich++)
                 {
-                    string stich = m_CurrentRound.AllRepeatsStiches[iStich].NumberRepeats + " " + m_CurrentRound.AllRepeatsStiches[iStich].Abbr.ToString();
+                    string stich = "";
+                    if (m_CurrentRound.AllRepeatsStiches[iStich].SpecialStich && !m_CurrentRound.AllRepeatsStiches[iStich].CountAsStich)
+                    {
+                        stich = " " + m_CurrentRound.AllRepeatsStiches[iStich].Name;
+                    }
+                    else
+                    {
+                        stich = m_CurrentRound.AllRepeatsStiches[iStich].NumberRepeats + " " + m_CurrentRound.AllRepeatsStiches[iStich].Abbr.ToString();
+                    }
                     listStiches.Add(stich);
                 }
 

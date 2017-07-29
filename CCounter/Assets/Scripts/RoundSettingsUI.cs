@@ -48,8 +48,9 @@ namespace CCounter
             m_StichSelected = id;
         }
 
-        private void Clear()
+        public void Clear()
         {
+            m_ListStiches = new List<Stich>();
             m_CurrentRound.text = string.Empty;
             m_SpecialStich.text = string.Empty;
 
@@ -146,13 +147,11 @@ namespace CCounter
                         auxS = " - " + m_ListStiches[i].Name;
                     }
 
-
                     // Special stich no stich, only show name
                     if ((m_ListStiches[i].SpecialStich) && (!m_ListStiches[i].CountAsStich))
                     {
-                        auxS = " - " + m_ListStiches[i].Name;                        
-                    }                   
-
+                        auxS = " - " + m_ListStiches[i].Name;
+                    } 
 
                     printS += auxS;
 
@@ -164,46 +163,6 @@ namespace CCounter
             }
 
             return printS;
-        }
-
-
-
-
-
-
-
-
-
-        public Round CreateRound(int numberRepeatsPerStich, int roundNumber)
-        {
-            Round round = new Round();
-            round.Repeats = numberRepeatsPerStich;
-            round.RoundNumber = roundNumber;
-
-            if ((m_ListStiches != null) && (m_ListStiches.Count > 0))
-            {
-                for (int i = 0; i < m_ListStiches.Count; i++)
-                {
-                    // Fill the summary
-                    //round.AddStich(m_ListStiches[i]);
-                }
-
-                // Generate all repeats for list of stiches
-                for (int iRepeat = 0; iRepeat < numberRepeatsPerStich; iRepeat++)
-                {
-                    for (int i = 0; i < m_ListStiches.Count; i++)
-                    {
-                        // Fill the repetitions
-                        //round.AddStichesAllRepeats(m_ListStiches[i]);
-                    }
-                }
-
-                // Remove list stiches
-                m_ListStiches.Clear();
-                m_ListStiches = new List<Stich>();
-            }
-
-            return round;
-        }
+        }        
     }
 }

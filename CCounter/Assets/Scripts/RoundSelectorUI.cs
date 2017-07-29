@@ -26,13 +26,13 @@ namespace CCounter
                         CheckedMenuButton chk = stichObj.GetComponent<CheckedMenuButton>();
                         if (chk != null)
                         {
-                            /*if (rnd.IsTickedOff)
+                            if (rnd.IsCompleted)
                             {
                                 chk.Check();
                             }else
                             {
                                 chk.UnCheck();
-                            }*/                            
+                            }                            
                         }
                     }
                 }

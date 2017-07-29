@@ -13,6 +13,7 @@ namespace CCounter
         [SerializeField] private RoundSettingsUI m_RoundSettingsUI;
         [SerializeField] private PartPatternSettings m_PartSettings;
         [SerializeField] private SaveRoundSettings m_SaveRoundSettings;
+        [SerializeField] private Message m_Message;
 
 
         private Round m_CurrentRound;
@@ -24,6 +25,7 @@ namespace CCounter
 
             m_PartSettings.Show();
             m_SaveRoundSettings.Hide();
+            m_Message.Hide();
         }
 
 
@@ -36,59 +38,18 @@ namespace CCounter
             m_CurrentRound.PartName = m_PartSettings.PartName;
             m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;
 
-            m_Title.text = m_CurrentRound.PartName + " Round: " + m_CurrentRound.RoundNumber;
-            
+            m_Title.text = m_CurrentRound.PartName + " Round: " + m_CurrentRound.RoundNumber;           
         }
-
-       // private Round m_CurrentRound;
-       // private int m_CurrentRoundNumber = 1;
-
-       /* public int RepeatsPerGroupStiches
-        {
-            get
-            {
-                int nRepeatsPerGroup = 1;
-                int auxNRepeats = 0;
-                if (int.TryParse(m_RepeatsPerGroupStiches.text, out auxNRepeats))
-                {
-                    nRepeatsPerGroup = auxNRepeats;
-                }
-
-                return nRepeatsPerGroup;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    m_RepeatsPerGroupStiches.text = "1";
-                }
-                else
-                {
-                    m_RepeatsPerGroupStiches.text = value.ToString();
-                }
-            }
-        }*/
         
 
         public void OnAddStich()
         {
             m_RoundSettingsUI.AddStich();
-
-
-
-
-           /* m_RoundSettingsUI.AddStich();
-           // int roundNumber = int.Parse(m_RoundNumber.text);
-           // m_CurrentTextRound.text = RepeatsPerGroupStiches.ToString() + " Repeat(s) For: \n" + m_RoundSettingsUI.PrintStiches();*/
         }
 
         public void OnAddSpecialStich()
         {
             m_RoundSettingsUI.AddSpecialStich();
-
-            /* m_RoundSettingsUI.AddSpecialStich();
-             int roundNumber = int.Parse(m_RoundNumber.text);
-             m_CurrentTextRound.text = RepeatsPerGroupStiches.ToString() + " Repeat(s) For: \n"  + m_RoundSettingsUI.PrintStiches();*/
         }
 
         public void OnSaveRound()
@@ -99,47 +60,16 @@ namespace CCounter
 
             }else
             {
-                m_RoundSettingsUI.CurrentRound = "Add some stiches, It is not possible to generate JSON data";
+                m_Message.MessageText = "The current round does not have any stiches.";
+                m_Message.OnOK += OnOkMessage;
+                m_Message.Show();
             }
+        }
 
-            
-
-
-            /*int nRepeatsPerGroup = RepeatsPerGroupStiches;
-
-            int auxRoundN = 0;
-            if (int.TryParse(m_RoundNumber.text, out auxRoundN))
-            {
-                m_CurrentRoundNumber = auxRoundN;
-            }
-
-            m_CurrentRound = m_RoundSettingsUI.CreateRound(nRepeatsPerGroup, m_CurrentRoundNumber);*/
-            /*if (!string.IsNullOrEmpty(m_PatternName.text))
-            {
-                m_CurrentRound.NamePattern = m_PatternName.text;
-            }
-            else
-            {
-                m_CurrentRound.NamePattern = "Pattern";
-            }
-            */
-            /* if (m_CurrentRound.Stiches.Count > 0)
-             { 
-
-                 // Add round to  list of rounds
-                 AppController.Instance.AddRound(m_CurrentRound);
-
-                 //m_CurrentRound.Clear();
-                 m_CurrentTextRound.text = "";
-                 //RepeatsPerGroupStiches = 1;
-
-                 m_CurrentRoundNumber += 1;
-                 m_RoundNumber.text = m_CurrentRoundNumber.ToString();
-
-             }else
-             {
-                 m_CurrentTextRound.text = "Add some stiches, It was not possible to generate JSON data";
-             }*/
+        public void OnOkMessage()
+        {
+            m_Message.OnOK -= OnOkMessage;
+            m_Message.Hide();
         }
 
         public void OnDeleteRound()
@@ -161,55 +91,64 @@ namespace CCounter
 
             if (m_RoundSettingsUI.ListStiches != null)
             {
+
+                List<Stich> specialStiches = new List<Stich>();
+
                 // Add all stiches
                 for (int i = 0; i < m_RoundSettingsUI.ListStiches.Count; i++)
                 {
-                     m_CurrentRound.Stiches.Add(m_RoundSettingsUI.ListStiches[i]);
+                    Stich stich = m_RoundSettingsUI.ListStiches[i];
+                    m_CurrentRound.Stiches.Add(stich);
+                    if (stich.SpecialStich && !stich.CountAsStich)
+                    {
+                        specialStiches.Add(stich);
+                    }
                 }
 
                 // Generate all repeats for this round and count total number stiches
-                m_CurrentRound.TotalNumberStiches = 0;
-                bool foundSpecialStich = false;
+                m_CurrentRound.TotalNumberStiches = 0;              
+
                 for (int iRepeat = 0; iRepeat < m_CurrentRound.Repeats; iRepeat++)
                 {
                     for (int iStich = 0; iStich < m_RoundSettingsUI.ListStiches.Count; iStich++)
                     {
-                        Stich stich = m_RoundSettingsUI.ListStiches[iStich];
+                        Stich stich = m_RoundSettingsUI.ListStiches[iStich];                       
 
-                        // Check if it's a special stich and not cound as a stich
-                        if (stich.SpecialStich && !stich.CountAsStich)
+                        // Only count if it's not a special stich and special stich but count as a stich
+                        if ((!stich.SpecialStich) || ((stich.SpecialStich) && (stich.CountAsStich)))
                         {
-                            if (stich.CountAsStich)
-                            {
-                                m_CurrentRound.AllRepeatsStiches.Add(stich);
-                                m_CurrentRound.TotalNumberStiches++;
-
-                            }
-                            else if (!foundSpecialStich)
-                            {
-                                // Add only the first time if it's not a stich
-                                m_CurrentRound.AllRepeatsStiches.Add(stich);
-                                foundSpecialStich = true;
-                            }
-                        }
-                        else
-                        {
-                            m_CurrentRound.TotalNumberStiches++;
                             m_CurrentRound.AllRepeatsStiches.Add(stich);
+                            m_CurrentRound.TotalNumberStiches++;
                         }
-
+                        
                     }
-
                 }
+
+                // Add special stiches (not count as a stiches)
+                for (int i= 0; i<specialStiches.Count; i++)
+                {
+                    m_CurrentRound.AllRepeatsStiches.Add(specialStiches[i]);
+                }
+
+
+                m_SaveRoundSettings.Hide();
+                // Save current round in JSON and create new round 
+                int numberRounds = AppController.Instance.AddRound(m_CurrentRound);                
+
+                m_Title.text = m_CurrentRound.RoundNumber + " " + m_CurrentRound.PartName + "  - Number Rounds: " + numberRounds;                
+
+                m_Message.MessageText = "The current round has been saved with " + m_CurrentRound.TotalNumberStiches + " stich(es)";
+                m_Message.OnOK += OnOkMessage;
+                m_Message.Show();
+
+                // Update Round
+                int indexRound =  m_CurrentRound.RoundNumber + 1;
+                m_CurrentRound = new Round();
+                m_CurrentRound.PartName = m_PartSettings.PartName;
+                m_CurrentRound.RoundNumber = indexRound;
+                m_RoundSettingsUI.Clear();
             }
-
-
-
         }
-
-        public void OnSavePart()
-        {
-
-        }
+       
 	}
 }

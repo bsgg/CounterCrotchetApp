@@ -50,8 +50,7 @@ namespace CCounter
         public List<Stich> Stiches;
         public List<Stich> AllRepeatsStiches;
         public int TotalNumberStiches;
-
-        //public bool IsTickedOff = false;        
+        public bool IsCompleted = false;        
 
         public Round()
         {
@@ -61,18 +60,8 @@ namespace CCounter
             Stiches = new List<Stich>();
             AllRepeatsStiches = new List<Stich>();
             TotalNumberStiches = 0;
-            //IsTickedOff = false;
+            IsCompleted = false;
         }
-
-        /*public void AddStich(Stich stich)
-        {
-            Stiches.Add(stich);
-        }
-
-        public void AddStichesAllRepeats(Stich stich)
-        {
-            AllRepeatsStiches.Add(stich);
-        }*/
         
     }    
     

@@ -48,13 +48,13 @@ namespace CCounter
 
         private void Start()
         {
-            Init();
+            LoadRoundsFromJSON();
             m_RoundCounterUI.Init();
             m_CurrentRoundIDSelected = 0;
             SelectMenu(ETYPEMENU.MAINMENU);            
         }
 
-        private void Init()
+        private void LoadRoundsFromJSON()
         {
             m_RoundList = new List<Round>();
 
@@ -111,6 +111,10 @@ namespace CCounter
         public List<string> GetListRounds()
         {
             List<string> lTitles = new List<string>();
+
+            // Load rounds from JSON first
+            LoadRoundsFromJSON();
+
             if (m_RoundList != null)
             {
                 for (int i=0; i< m_RoundList.Count; i++)
@@ -118,7 +122,16 @@ namespace CCounter
                     string titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + ": ";
                     for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
                     {
-                        titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
+                        if (m_RoundList[i].Stiches[iStich].SpecialStich && !m_RoundList[i].Stiches[iStich].CountAsStich)
+                        {
+                            titleRound += " " + m_RoundList[i].Stiches[iStich].Name;
+                        }
+                        else
+                        {
+                            titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
+                        }
+
+                        //titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
 
                         if (iStich < m_RoundList[i].Stiches.Count - 1)
                         {
@@ -138,11 +151,13 @@ namespace CCounter
             return lTitles;
         }
 
-        public void AddRound(Round round)
+        public int AddRound(Round round)
         {            
             CCFileUtil.SaveRoundToJSON(round);
             m_RoundList.Add(round);
             Debug.Log("[APPController] New Round added to JSON");
+
+            return m_RoundList.Count;
         }
 
         private void SelectMenu(ETYPEMENU menu)
@@ -212,7 +227,7 @@ namespace CCounter
 
             if (round != null)
             {
-                //round.IsTickedOff = true;
+                round.IsCompleted = true;
                 CCFileUtil.SaveRoundToJSON(round);
             }
         }

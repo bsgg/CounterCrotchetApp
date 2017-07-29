@@ -47,6 +47,5 @@ namespace CCounter
             m_PartStartIndexInput.text = "1";
 
         }
-
     }
 }

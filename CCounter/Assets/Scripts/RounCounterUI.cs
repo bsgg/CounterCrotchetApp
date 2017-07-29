@@ -11,6 +11,8 @@ namespace CCounter
         [SerializeField]
         private Text m_RoundDescription; 
         [SerializeField] private ScrollPanelUI m_CounterRoundListScroll;
+        [SerializeField]
+        private Toggle m_RoundCompletedToggle;
 
         private int m_CurrentCounter = 0;
         private Round m_CurrentRound;
@@ -35,7 +37,26 @@ namespace CCounter
 
             if (m_CurrentRound != null)
             {
+                if (m_CurrentRound.IsCompleted)
+                {
+                    m_RoundCompletedToggle.isOn = true;
+                }
+                else
+                {
+                    m_RoundCompletedToggle.isOn = false;
+                }
+
                 m_RoundDescription.text = "R" + m_CurrentRound.RoundNumber.ToString() + ":";
+
+                if (m_CurrentRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
+                {
+                    m_RoundDescription.text = "(Front Loops) - R" + m_CurrentRound.RoundNumber.ToString() + ":";
+                }
+                else if (m_CurrentRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
+                {
+                    m_RoundDescription.text = "(Back Loops) - R" + m_CurrentRound.RoundNumber.ToString() + ":";
+                }               
+
 
                 //int numberStiches = 0;
                 for (int iStich = 0; iStich < m_CurrentRound.Stiches.Count; iStich++)
@@ -120,7 +141,7 @@ namespace CCounter
         public void OnNextRound()
         {
             // Last  group, check round and get next one
-            AppController.Instance.FinishCurrentRoundInList();
+            AppController.Instance.FinishCurrentRoundInList(m_RoundCompletedToggle.isOn);
 
             Round round = AppController.Instance.GetNextRoundInList();
 

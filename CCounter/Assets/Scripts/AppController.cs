@@ -119,7 +119,20 @@ namespace CCounter
             {
                 for (int i=0; i< m_RoundList.Count; i++)
                 {
-                    string titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + ": ";
+                    string titleRound = "";                    
+
+                    if (m_RoundList[i].TypeRound == Round.ETYPEROUND.FRONTLOOPY)
+                    {
+                        titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + " (Front Loops): ";
+                    }else if (m_RoundList[i].TypeRound == Round.ETYPEROUND.BACKLOOP)
+                    {
+                        titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + " (Back Loops): ";
+                    }else
+                    {
+                        titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + " : ";
+                    }
+                    
+
                     for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
                     {
                         if (m_RoundList[i].Stiches[iStich].SpecialStich && !m_RoundList[i].Stiches[iStich].CountAsStich)
@@ -221,13 +234,13 @@ namespace CCounter
             SelectMenu(ETYPEMENU.ROUNDCOUNTER);            
         }        
 
-        public void FinishCurrentRoundInList()
+        public void FinishCurrentRoundInList(bool completed)
         {
             Round round = GetRoundById(m_CurrentRoundIDSelected);
 
             if (round != null)
             {
-                round.IsCompleted = true;
+                round.IsCompleted = completed;
                 CCFileUtil.SaveRoundToJSON(round);
             }
         }

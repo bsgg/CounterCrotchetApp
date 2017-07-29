@@ -18,7 +18,7 @@ namespace CCounter
             for (int i= 0; i< AppController.Instance.NumberRounds; i++ )
             {
                 Round rnd = AppController.Instance.GetRoundById(i);
-                if (rnd != null && rnd.IsTickedOff)
+                if (rnd != null /*&& rnd.IsTickedOff*/)
                 {
                     GameObject stichObj = m_RoundListScroll.GetElement(i);
                     if (stichObj != null)
@@ -26,13 +26,13 @@ namespace CCounter
                         CheckedMenuButton chk = stichObj.GetComponent<CheckedMenuButton>();
                         if (chk != null)
                         {
-                            if (rnd.IsTickedOff)
+                            /*if (rnd.IsTickedOff)
                             {
                                 chk.Check();
                             }else
                             {
                                 chk.UnCheck();
-                            }                            
+                            }*/                            
                         }
                     }
                 }

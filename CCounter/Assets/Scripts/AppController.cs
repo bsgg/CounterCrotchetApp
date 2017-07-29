@@ -115,7 +115,7 @@ namespace CCounter
             {
                 for (int i=0; i< m_RoundList.Count; i++)
                 {
-                    string titleRound = m_RoundList[i].NamePattern + " - R" + m_RoundList[i].RoundNumber + ": ";
+                    string titleRound = m_RoundList[i].PartName + " - R" + m_RoundList[i].RoundNumber + ": ";
                     for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
                     {
                         titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
@@ -126,9 +126,9 @@ namespace CCounter
                         }
                     }
 
-                    if (m_RoundList[i].RepeatsPerGroupStiches > 1)
+                    if (m_RoundList[i].Repeats > 1)
                     {
-                        titleRound += "  - Repeat x " + m_RoundList[i].RepeatsPerGroupStiches.ToString();
+                        titleRound += "  - Repeat x " + m_RoundList[i].Repeats.ToString();
                     }
 
                     lTitles.Add(titleRound);
@@ -212,7 +212,7 @@ namespace CCounter
 
             if (round != null)
             {
-                round.IsTickedOff = true;
+                //round.IsTickedOff = true;
                 CCFileUtil.SaveRoundToJSON(round);
             }
         }

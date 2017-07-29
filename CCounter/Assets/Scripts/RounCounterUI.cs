@@ -50,11 +50,11 @@ namespace CCounter
                     }
                 }
 
-                numberStiches *= m_CurrentRound.RepeatsPerGroupStiches;
+                numberStiches *= m_CurrentRound.Repeats;
 
-                if (m_CurrentRound.RepeatsPerGroupStiches > 1)
+                if (m_CurrentRound.Repeats > 1)
                 {
-                    m_RoundDescription.text += "  - Repeat x " + m_CurrentRound.RepeatsPerGroupStiches.ToString();
+                    m_RoundDescription.text += "  - Repeat x " + m_CurrentRound.Repeats.ToString();
                 }
                 m_RoundDescription.text += " (" + numberStiches + " stiches)";
 

@@ -24,7 +24,7 @@ namespace CCounter
             }
 
             // Check path
-            string path = root + round.RoundNumber + "_" + round.NamePattern + ".json";       
+            string path = root + round.RoundNumber + "_" + round.PartName + ".json";       
 
             if (File.Exists(path))
             {

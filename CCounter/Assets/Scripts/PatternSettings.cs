@@ -22,7 +22,9 @@ namespace CCounter
         public int  IdStich;  
         public string Abbr;        
         public string Name;        
-        public int NumberRepeats;            
+        public int NumberRepeats;
+        public bool SpecialStich;
+        public bool CountAsStich;         
 
         public Stich()
         {
@@ -30,28 +32,39 @@ namespace CCounter
             Abbr = "";
             Name = "";
             NumberRepeats = 0;
+            SpecialStich = false;
+            CountAsStich = true;
         }
     }
 
     [System.Serializable]
     public class Round
     {
-        public string NamePattern;
+        public enum ETYPEROUND { NORMAL, FRONTLOOPY, BACKLOOP};
+
+        public string PartName;
+        public ETYPEROUND TypeRound = ETYPEROUND.NORMAL;        
         public int RoundNumber;
-        public int RepeatsPerGroupStiches;
-        public List<Stich>Stiches;
+        public int Repeats;
+        
+        public List<Stich> Stiches;
         public List<Stich> AllRepeatsStiches;
-        public bool IsTickedOff = false;        
+        public int TotalNumberStiches;
+
+        //public bool IsTickedOff = false;        
 
         public Round()
         {
+            PartName = "Part";
+            TypeRound = ETYPEROUND.NORMAL;
             RoundNumber = 0;
             Stiches = new List<Stich>();
             AllRepeatsStiches = new List<Stich>();
-            IsTickedOff = false;
+            TotalNumberStiches = 0;
+            //IsTickedOff = false;
         }
 
-        public void AddStich(Stich stich)
+        /*public void AddStich(Stich stich)
         {
             Stiches.Add(stich);
         }
@@ -59,7 +72,7 @@ namespace CCounter
         public void AddStichesAllRepeats(Stich stich)
         {
             AllRepeatsStiches.Add(stich);
-        }
+        }*/
         
     }    
     

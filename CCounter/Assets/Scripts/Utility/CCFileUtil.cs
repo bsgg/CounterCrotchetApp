@@ -24,7 +24,14 @@ namespace CCounter
             }
 
             // Check path
-            string path = root + round.RoundNumber + "_" + round.PartName + ".json";       
+            string roundN = round.RoundNumber.ToString();
+            if (round.RoundNumber < 10)
+            {
+                roundN = "0" + round.RoundNumber.ToString();
+            }
+            string path = root + roundN + "_" + round.PartName + ".json";
+
+            Debug.Log("[APPController.CCFileUtil] SaveRoundToJSON path: " + path);
 
             if (File.Exists(path))
             {

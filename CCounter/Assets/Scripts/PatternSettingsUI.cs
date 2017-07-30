@@ -118,7 +118,7 @@ namespace CCounter
                         if ((!stich.SpecialStich) || ((stich.SpecialStich) && (stich.CountAsStich)))
                         {
                             m_CurrentRound.AllRepeatsStiches.Add(stich);
-                            m_CurrentRound.TotalNumberStiches++;
+                            m_CurrentRound.TotalNumberStiches += stich.NumberRepeats;
                         }
                         
                     }
@@ -133,9 +133,9 @@ namespace CCounter
 
                 m_SaveRoundSettings.Hide();
                 // Save current round in JSON and create new round 
-                int numberRounds = AppController.Instance.AddRound(m_CurrentRound);                
+                int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);                
 
-                m_Title.text = m_CurrentRound.RoundNumber + " " + m_CurrentRound.PartName + "  - Number Rounds: " + numberRounds;                
+                              
 
                 m_Message.MessageText = "The current round has been saved with " + m_CurrentRound.TotalNumberStiches + " stich(es)";
                 m_Message.OnOK += OnOkMessage;
@@ -146,6 +146,9 @@ namespace CCounter
                 m_CurrentRound = new Round();
                 m_CurrentRound.PartName = m_PartSettings.PartName;
                 m_CurrentRound.RoundNumber = indexRound;
+
+                m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
+
                 m_RoundSettingsUI.Clear();
             }
         }

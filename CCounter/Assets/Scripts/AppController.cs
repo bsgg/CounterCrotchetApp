@@ -164,11 +164,11 @@ namespace CCounter
             return lTitles;
         }
 
-        public int AddRound(Round round)
+        public int SaveRound(Round round)
         {            
             CCFileUtil.SaveRoundToJSON(round);
             m_RoundList.Add(round);
-            Debug.Log("[APPController] New Round added to JSON");
+            
 
             return m_RoundList.Count;
         }

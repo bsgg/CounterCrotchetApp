@@ -118,7 +118,30 @@ namespace CCounter
                         if ((!stich.SpecialStich) || ((stich.SpecialStich) && (stich.CountAsStich)))
                         {
                             m_CurrentRound.AllRepeatsStiches.Add(stich);
-                            m_CurrentRound.TotalNumberStiches += stich.NumberRepeats;
+                            if (stich.SpecialStich)
+                            {
+                                m_CurrentRound.TotalNumberStiches += stich.NumberRepeats;
+                            }else
+                            {
+                                PatternSettings.ESTICH eStich = (PatternSettings.ESTICH)stich.IdStich;
+                                switch(eStich)
+                                {
+                                    case PatternSettings.ESTICH.INCREASE:
+                                    case PatternSettings.ESTICH.INVISIBLE_INCREASE:
+                                        // 2 Stiches when increase
+                                        m_CurrentRound.TotalNumberStiches += (stich.NumberRepeats * 2);
+                                    break;
+                                    case PatternSettings.ESTICH.DECREASE:
+                                    case PatternSettings.ESTICH.INVISIBLE_DECREASE:
+                                        // Decrease count as a 1 only.
+                                        m_CurrentRound.TotalNumberStiches += (stich.NumberRepeats);
+                                    break;
+                                    default:
+                                        // Reast of them number or repeats
+                                        m_CurrentRound.TotalNumberStiches += stich.NumberRepeats;
+                                    break;
+                                }
+                            }
                         }
                         
                     }
@@ -131,15 +154,19 @@ namespace CCounter
                 }
 
 
-                m_SaveRoundSettings.Hide();
+                //m_SaveRoundSettings.Hide();
                 // Save current round in JSON and create new round 
-                int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);                
+                int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
 
-                              
 
-                m_Message.MessageText = "The current round has been saved with " + m_CurrentRound.TotalNumberStiches + " stich(es)";
+                m_SaveRoundSettings.ShowConfirm("The current round has been saved with " + m_CurrentRound.TotalNumberStiches + " stich(es)");
+                
+                
+                               
+
+                /*m_Message.MessageText = "The current round has been saved with " + m_CurrentRound.TotalNumberStiches + " stich(es)";
                 m_Message.OnOK += OnOkMessage;
-                m_Message.Show();
+                m_Message.Show();*/
 
                 // Update Round
                 int indexRound =  m_CurrentRound.RoundNumber + 1;

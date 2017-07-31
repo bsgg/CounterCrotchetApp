@@ -7,10 +7,21 @@ namespace CCounter
 {
     public class SaveRoundSettings : UIBase
     {
+        [Header("Save Round Content")]
+        [SerializeField]
+        private GameObject m_ContentSaveRound;
+
         [SerializeField] private InputField m_RepeatsRound;
         [SerializeField] private Toggle m_NormalToggle;
         [SerializeField] private Toggle m_FrongLoopToggle;
         [SerializeField] private Toggle m_BackLoopToggle;
+
+
+        [Header("Confirm Save Round Content")]
+        [SerializeField]
+        private GameObject m_ConfirmSaveRound;
+        [SerializeField]
+        private Text m_ConfirmText;
 
         public int RepeatsRound
         {
@@ -57,6 +68,35 @@ namespace CCounter
             m_NormalToggle.isOn = true;
             m_FrongLoopToggle.isOn = false;
             m_BackLoopToggle.isOn = false;
+
+
+            m_ContentSaveRound.SetActive(true);
+            m_ContentSaveRound.SetActive(false);
+
         }
+
+        public override void Hide()
+        {
+            base.Hide();
+
+            m_RepeatsRound.text = "1";
+            m_NormalToggle.isOn = true;
+            m_FrongLoopToggle.isOn = false;
+            m_BackLoopToggle.isOn = false;
+
+
+            m_ContentSaveRound.SetActive(true);
+            m_ContentSaveRound.SetActive(false);
+        }
+       
+
+        public void ShowConfirm(string text)
+        {
+            m_ConfirmText.text = text;
+            m_ContentSaveRound.SetActive(false);
+            m_ContentSaveRound.SetActive(true);
+        }
+
+        
     }
 }

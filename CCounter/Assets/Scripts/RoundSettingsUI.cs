@@ -96,7 +96,7 @@ namespace CCounter
             {
                 Stich stich = new Stich();
 
-                stich.IdStich = 0;
+                stich.IdStich = (int)PatternSettings.ESTICH.NONE;
                 stich.Abbr = m_SpecialStich.text;
                 stich.Name = m_SpecialStich.text;
                 stich.SpecialStich = true;

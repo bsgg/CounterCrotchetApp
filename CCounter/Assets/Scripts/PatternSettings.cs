@@ -5,8 +5,10 @@ namespace CCounter
 {
     public class PatternSettings
     {
+        public enum ESTICH { NONE = -1, MAGIC_RING = 0, SLIP_STICH, SINGLE_CROTCHET, INCREASE, INVISIBLE_INCREASE, DECREASE, INVISIBLE_DECREASE, DOUBLE_CROTCHET, HALF_DOUBLE_CROTCHET };
+
         public static string[] Stiches = new string[] {
-            "Magic Ring", "Slip Stich","Single Crotchet","Increasec",
+            "Magic Ring", "Slip Stich","Single Crotchet","Increase",
             "Invisible Increase", "Decrease", "Invisible Decrease", "Double Crotchet",
             "Half Double Crotchet" };
 
@@ -28,7 +30,7 @@ namespace CCounter
 
         public Stich()
         {
-            IdStich = -1;
+            IdStich = (int)PatternSettings.ESTICH.NONE;
             Abbr = "";
             Name = "";
             NumberRepeats = 0;

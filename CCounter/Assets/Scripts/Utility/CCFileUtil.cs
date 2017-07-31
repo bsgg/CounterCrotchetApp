@@ -46,7 +46,6 @@ namespace CCounter
             }
         }
 
-
         public static List<string> ListJSONFiles()
         {
             List<string> lfiles = new List<string>();
@@ -95,33 +94,24 @@ namespace CCounter
             }
 
             return false;
+        }
 
+        public static int RemoveAllRounds()
+        {
+            List<string> listFiles = ListJSONFiles();
 
-            // Load data from resources
-            //string pathFile = "Patterns/" + fileName;
+            int numberFilesRemoved = 0;
 
-
-
-
-            /*TextAsset text_asset = (TextAsset)Resources.Load(pathFile, typeof(TextAsset));
-                    if (text_asset == null)
-                    {
-                        DebugManager.Instance.Log("FileNotFound: " + pathFile + "\n");
-                        Debug.Log("ERROR: Could not find file: Assets/Resources/" + pathFile);
-                        return false;
-                    }
-
-                    //string json_string = text_asset.ToString();
-                    if (!string.IsNullOrEmpty(json_string))
+            if (listFiles != null)
+            {
+                numberFilesRemoved = listFiles.Count;
+                for (int i= listFiles.Count -1; i > 0; i--)
                 {
-                    rounData = JsonMapper.ToObject<Round>(json_string);
-                    return true;
-                }else
-                {
-                    DebugManager.Instance.Log("JsonFile Null\n");
-                }*/
+                    File.Delete(listFiles[i]);
+                }
+            }
 
-            return false;
+            return numberFilesRemoved;            
         }
 
     }

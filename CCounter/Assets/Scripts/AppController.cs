@@ -40,7 +40,7 @@ namespace CCounter
         private RoundSelectorUI m_RoundSelectorUI;
 
         [SerializeField]
-        private RounCounterUI m_RoundCounterUI;
+        private RoundCounterUI m_RoundCounterUI;
 
         [SerializeField]
         private List<Round> m_RoundList;
@@ -224,6 +224,12 @@ namespace CCounter
         public void OnSelectRound()
         {
             SelectMenu(ETYPEMENU.ROUNDSELECTOR);
+        }
+
+        public void OnRemoveAllRounds()
+        {
+            int files = CCFileUtil.RemoveAllRounds();
+            Debug.Log("OnRemoveAllRounds files removed: " + files);
         }
 
         public void OnShowRoundCounter(int idRound)

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace CCounter
 {
-    public class RounCounterUI : UIBase
+    public class RoundCounterUI : UIBase
     {
         [SerializeField]
         private Text m_RoundDescription; 

@@ -31,7 +31,7 @@ namespace CCounter
         private ETYPEMENU m_CurrentMenu = ETYPEMENU.MAINMENU;
 
         [SerializeField]
-        private UIBase m_MainMenuUI;
+        private MainMenu m_MainMenuUI;
 
         [SerializeField]
         private PatternSettingsUI m_PatternSettingsUI;
@@ -59,7 +59,7 @@ namespace CCounter
             m_RoundList = new List<Round>();
 
             // Get current list of rounds
-            List<string> listFiles = CCFileUtil.ListJSONFiles();
+            List<string> listFiles = CCFileUtil.ListJSONFiles(false);
 
             DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
 
@@ -228,8 +228,19 @@ namespace CCounter
 
         public void OnRemoveAllRounds()
         {
-            int files = CCFileUtil.RemoveAllRounds();
-            Debug.Log("OnRemoveAllRounds files removed: " + files);
+            int nfiles = CCFileUtil.RemoveAllRounds();
+            if (nfiles <= 0)
+            {
+                m_MainMenuUI.ShowConfirm(" There weren't any rounds to remove.");
+            }else if (nfiles == 1)
+            {
+                m_MainMenuUI.ShowConfirm(" There was 1 round to remove.");
+            }
+            else
+            {
+                m_MainMenuUI.ShowConfirm(nfiles + " have been removed ");
+            }
+
         }
 
         public void OnShowRoundCounter(int idRound)

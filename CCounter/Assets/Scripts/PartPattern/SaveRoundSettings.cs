@@ -71,8 +71,13 @@ namespace CCounter
 
 
             m_ContentSaveRound.SetActive(true);
-            m_ContentSaveRound.SetActive(false);
+            m_ConfirmSaveRound.SetActive(false);
 
+        }
+
+        public void OnCancelSaveRound()
+        {
+            Hide();
         }
 
         public override void Hide()
@@ -86,7 +91,7 @@ namespace CCounter
 
 
             m_ContentSaveRound.SetActive(true);
-            m_ContentSaveRound.SetActive(false);
+            m_ConfirmSaveRound.SetActive(false);
         }
        
 
@@ -94,7 +99,7 @@ namespace CCounter
         {
             m_ConfirmText.text = text;
             m_ContentSaveRound.SetActive(false);
-            m_ContentSaveRound.SetActive(true);
+            m_ConfirmSaveRound.SetActive(true);
         }
 
         

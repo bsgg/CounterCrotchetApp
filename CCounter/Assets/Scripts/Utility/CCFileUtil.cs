@@ -46,7 +46,7 @@ namespace CCounter
             }
         }
 
-        public static List<string> ListJSONFiles()
+        public static List<string> ListJSONFiles(bool includePath = false)
         {
             List<string> lfiles = new List<string>();
             // Get name files
@@ -56,12 +56,18 @@ namespace CCounter
                 string[] auxFiles = Directory.GetFiles(root, "*.json");
                 if (auxFiles != null)
                 {
-
                     for (int i = 0; i < auxFiles.Length; i++)
                     {
-                        string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
-                        filename.Trim();
-                        lfiles.Add(filename);
+                        if (includePath)
+                        {
+                            lfiles.Add(auxFiles[i].Trim());
+                        }
+                        else
+                        {                            
+                            string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
+                            filename.Trim();
+                            lfiles.Add(filename);
+                        }
                     }
                 }
             }
@@ -98,16 +104,20 @@ namespace CCounter
 
         public static int RemoveAllRounds()
         {
-            List<string> listFiles = ListJSONFiles();
+            List<string> listFiles = ListJSONFiles(true);
 
             int numberFilesRemoved = 0;
 
             if (listFiles != null)
             {
                 numberFilesRemoved = listFiles.Count;
-                for (int i= listFiles.Count -1; i > 0; i--)
+                for (int i= listFiles.Count -1; (i >= 0); i--)
                 {
-                    File.Delete(listFiles[i]);
+                    Debug.Log("[CCFileUtil] Remove file:  " + listFiles[i]);
+                    if (File.Exists(listFiles[i]))
+                    {
+                        File.Delete(listFiles[i]);
+                    }
                 }
             }
 

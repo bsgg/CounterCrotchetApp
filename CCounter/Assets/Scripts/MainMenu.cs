@@ -6,7 +6,7 @@ namespace CCounter
 {
     public class MainMenu : UIBase
     {
-        [SerializeField]   private Message m_ConfirmMessage;
+        [SerializeField]   private MessagePopup m_ConfirmMessage;
 
         public override void Show()
         {
@@ -24,7 +24,7 @@ namespace CCounter
 
         public void ShowConfirm(string text)
         {
-            m_ConfirmMessage.MessageText = text;
+            //m_ConfirmMessage.MessageText = text;
             m_ConfirmMessage.Show();
         }
 

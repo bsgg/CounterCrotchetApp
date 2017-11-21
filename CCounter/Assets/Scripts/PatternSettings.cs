@@ -21,21 +21,21 @@ namespace CCounter
     [System.Serializable]
     public class Stich
     {
-        public int  IdStich;  
-        public string Abbr;        
+       // public int  IdStich;  
+        //public string Abbr;        
         public string Name;        
         public int NumberRepeats;
-        public bool SpecialStich;
-        public bool CountAsStich;         
+        //public bool SpecialStich;
+        //public bool CountAsStich;         
 
         public Stich()
         {
-            IdStich = (int)PatternSettings.ESTICH.NONE;
-            Abbr = "";
+            //IdStich = (int)PatternSettings.ESTICH.NONE;
+           // Abbr = "";
             Name = "";
             NumberRepeats = 0;
-            SpecialStich = false;
-            CountAsStich = true;
+           // SpecialStich = false;
+            //CountAsStich = true;
         }
     }
 

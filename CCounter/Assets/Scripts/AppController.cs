@@ -34,7 +34,7 @@ namespace CCounter
         private MainMenu m_MainMenuUI;
 
         [SerializeField]
-        private PatternSettingsUI m_PatternSettingsUI;
+        private PartPattern m_PartPattern;
 
         [SerializeField]
         private RoundSelectorUI m_RoundSelectorUI;
@@ -135,14 +135,14 @@ namespace CCounter
 
                     for (int iStich = 0; iStich < m_RoundList[i].Stiches.Count; iStich++)
                     {
-                        if (m_RoundList[i].Stiches[iStich].SpecialStich && !m_RoundList[i].Stiches[iStich].CountAsStich)
+                        /*if (m_RoundList[i].Stiches[iStich].SpecialStich && !m_RoundList[i].Stiches[iStich].CountAsStich)
                         {
                             titleRound += " " + m_RoundList[i].Stiches[iStich].Name;
                         }
                         else
                         {
                             titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
-                        }
+                        }*/
 
                         //titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
 
@@ -182,7 +182,7 @@ namespace CCounter
 
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Hide();
-                    m_PatternSettingsUI.Hide();
+                    m_PartPattern.Hide();
                     m_MainMenuUI.Show();
 
                 break;
@@ -191,21 +191,21 @@ namespace CCounter
 
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Hide();
-                    m_PatternSettingsUI.Show();
+                    m_PartPattern.Show();
                     m_MainMenuUI.Hide();
                 break;
 
                 case ETYPEMENU.ROUNDCOUNTER:
                     m_RoundCounterUI.Show();
                     m_RoundSelectorUI.Hide();
-                    m_PatternSettingsUI.Hide();
+                    m_PartPattern.Hide();
                     m_MainMenuUI.Hide();
                     break;
 
                 case ETYPEMENU.ROUNDSELECTOR:
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Show();
-                    m_PatternSettingsUI.Hide();
+                    m_PartPattern.Hide();
                     m_MainMenuUI.Hide();
                 break;
             }

@@ -44,6 +44,9 @@ namespace CCounter
 
         [SerializeField]
         private List<Round> m_RoundList;
+
+        [SerializeField]
+        private List<Pattern> m_Pattern;
         private int m_CurrentRoundIDSelected;
 
         private void Start()
@@ -62,6 +65,7 @@ namespace CCounter
             List<string> listFiles = CCFileUtil.ListJSONFiles(false);
 
             DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
+            m_Pattern = new List<Pattern>();
 
             int nErrorRounds = 0;
             for (int i = 0; i < listFiles.Count; i++)
@@ -69,13 +73,38 @@ namespace CCounter
                 Round round = new Round();
                 if (CCFileUtil.LoadRoundJSON(listFiles[i], out round))
                 {
-                    m_RoundList.Add(round);
+                    //m_RoundList.Add(round);
                 }
                 else
                 {
                     nErrorRounds++;
-                    
+
                     Debug.Log("[APPController] It was not possible to get the round");
+                }
+
+                // Check categorie
+                string[] splitted = listFiles[i].Split('_');
+                if (splitted != null && splitted.Length > 1)
+                {
+                    string nameDesign = splitted[1].ToLower().Trim();
+
+                    // Check if this design exist or new design
+                    bool found = false;
+                    int indexP = 0;
+                    for (indexP = 0; (indexP < m_Pattern.Count)&&(!found); indexP++)
+                    {
+                        if (m_Pattern[indexP].Name == nameDesign)
+                        {
+                            found = true;
+                        }
+                    }
+                    if (found)
+                    {
+                        m_Pattern[indexP].Rounds.Add(round);
+                    }else
+                    {
+                        m_Pattern.Add(new Pattern(nameDesign, round));
+                    }
                 }
             }
 

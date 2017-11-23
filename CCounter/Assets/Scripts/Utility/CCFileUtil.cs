@@ -87,15 +87,27 @@ namespace CCounter
             else
             {
                 DebugManager.Instance.Log("File: " + pathFile + "\n");
-                string jsonString = File.ReadAllText(pathFile);
-                if (!string.IsNullOrEmpty(jsonString))
+                try
                 {
-                    rounData = JsonMapper.ToObject<Round>(jsonString);
-                    return true;
+                    string jsonString = File.ReadAllText(pathFile);
+                    if (!string.IsNullOrEmpty(jsonString))
+                    {
+                        rounData = JsonMapper.ToObject<Round>(jsonString);
+                        return true;
+                    }
+                    else
+                    {
+                        DebugManager.Instance.Log("jsonString is null or empty\n");
+                        return false;
+                    }
 
-                }else
+                }
+                catch (Exception e)
                 {
-                    DebugManager.Instance.Log("jsonString is null or empty\n");
+
+                    DebugManager.Instance.Log("Mal formed File: " + pathFile);
+                    return false;
+
                 }
             }
 

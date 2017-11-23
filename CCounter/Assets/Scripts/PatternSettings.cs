@@ -5,7 +5,7 @@ namespace CCounter
 {
     public class PatternSettings
     {
-        public enum ESTICH { NONE = -1, MAGIC_RING = 0, SLIP_STICH, SINGLE_CROTCHET, INCREASE, INVISIBLE_INCREASE, DECREASE, INVISIBLE_DECREASE, DOUBLE_CROTCHET, HALF_DOUBLE_CROTCHET };
+        /*public enum ESTICH { NONE = -1, MAGIC_RING = 0, SLIP_STICH, SINGLE_CROTCHET, INCREASE, INVISIBLE_INCREASE, DECREASE, INVISIBLE_DECREASE, DOUBLE_CROTCHET, HALF_DOUBLE_CROTCHET };
 
         public static string[] Stiches = new string[] {
             "Magic Ring", "Slip Stich","Single Crotchet","Increase",
@@ -15,27 +15,22 @@ namespace CCounter
         public static string[] StichesAbbreviations = new string[] {
             "Mg", "Sl", "Sc", "Inc",
             "Inv Inc", "Dec", "Inv Dec", "Dc",
-            "Hdc" };
+            "Hdc" };*/
     }
 
     [System.Serializable]
     public class Stich
     {
-       // public int  IdStich;  
-        //public string Abbr;        
+   
         public string Name;        
         public int NumberRepeats;
-        //public bool SpecialStich;
-        //public bool CountAsStich;         
+        public bool RepeatStich;        
 
         public Stich()
         {
-            //IdStich = (int)PatternSettings.ESTICH.NONE;
-           // Abbr = "";
             Name = "";
             NumberRepeats = 0;
-           // SpecialStich = false;
-            //CountAsStich = true;
+            RepeatStich = true;
         }
     }
 
@@ -64,7 +59,21 @@ namespace CCounter
             TotalNumberStiches = 0;
             IsCompleted = false;
         }
-        
-    }    
-    
+    }
+
+    [System.Serializable]
+    public class Pattern
+    {
+        public List<Round> Rounds;
+        public string Name;
+
+        public Pattern(string name, Round r)
+        {
+            Name = name;
+            Rounds = new List<Round>();
+            Rounds.Add(r);
+        }
+
+    }
+
 }

@@ -64,8 +64,8 @@ namespace CCounter
     [System.Serializable]
     public class Pattern
     {
-        public List<Round> Rounds;
         public string Name;
+        public List<Round> Rounds;        
 
         public Pattern(string name, Round r)
         {

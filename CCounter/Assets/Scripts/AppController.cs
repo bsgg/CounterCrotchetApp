@@ -42,11 +42,11 @@ namespace CCounter
         [SerializeField]
         private RoundCounterUI m_RoundCounterUI;
 
-        [SerializeField]
-        private List<Round> m_RoundList;
+        /*[SerializeField]
+        private List<Round> m_RoundList;*/
 
         [SerializeField]
-        private List<Pattern> m_Pattern;
+        private List<Pattern> m_Patterns;
         private int m_CurrentRoundIDSelected;
 
         private void Start()
@@ -59,13 +59,13 @@ namespace CCounter
 
         private void LoadRoundsFromJSON()
         {
-            m_RoundList = new List<Round>();
-
+            //m_RoundList = new List<Round>();
+            m_Patterns = new List<Pattern>();
             // Get current list of rounds
             List<string> listFiles = CCFileUtil.ListJSONFiles(false);
 
             DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
-            m_Pattern = new List<Pattern>();
+            
 
             int nErrorRounds = 0;
             for (int i = 0; i < listFiles.Count; i++)
@@ -91,19 +91,20 @@ namespace CCounter
                     // Check if this design exist or new design
                     bool found = false;
                     int indexP = 0;
-                    for (indexP = 0; (indexP < m_Pattern.Count)&&(!found); indexP++)
+                    for (indexP = 0; (indexP < m_Patterns.Count)&&(!found); indexP++)
                     {
-                        if (m_Pattern[indexP].Name == nameDesign)
+                        if (m_Patterns[indexP].Name == nameDesign)
                         {
                             found = true;
+                            break;
                         }
                     }
                     if (found)
                     {
-                        m_Pattern[indexP].Rounds.Add(round);
+                        m_Patterns[indexP].Rounds.Add(round);
                     }else
                     {
-                        m_Pattern.Add(new Pattern(nameDesign, round));
+                        m_Patterns.Add(new Pattern(nameDesign, round));
                     }
                 }
             }
@@ -114,17 +115,16 @@ namespace CCounter
             }
         }
 
-        public Round GetRoundById(int id)
+        public Round GetRoundById(int idPattern, int idRound)
         {
-            if (m_RoundList != null && id < m_RoundList.Count)
-            {
-                return m_RoundList[id];
-            }
+            if ((m_Patterns == null) || (idPattern < 0) || (idPattern >= m_Patterns.Count)) return null;
 
-            return null;
+            if ((m_Patterns[idRound].Rounds == null) || (idRound < 0) || (idRound >= m_Patterns[idRound].Rounds.Count)) return null;
+
+            return m_Patterns[idPattern].Rounds[idRound];
         }
 
-        public int NumberRounds
+        /*public int NumberRounds
         {
             get
             {
@@ -134,7 +134,7 @@ namespace CCounter
                 }
                 return 0;
             }
-        }
+        }*/
 
 
         public List<string> GetListRounds()

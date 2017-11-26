@@ -31,7 +31,10 @@ namespace CCounter
         private ETYPEMENU m_CurrentMenu = ETYPEMENU.MAINMENU;
 
         [SerializeField]
-        private MainMenu m_MainMenuUI;
+        private TopBar m_TopBar;
+
+        [SerializeField]
+        private UIBase m_MainMenuUI;
 
         [SerializeField]
         private PartPattern m_PartPattern;
@@ -42,77 +45,73 @@ namespace CCounter
         [SerializeField]
         private RoundCounterUI m_RoundCounterUI;
 
-        /*[SerializeField]
-        private List<Round> m_RoundList;*/
 
         [SerializeField]
         private List<Pattern> m_Patterns;
+        public List<Pattern> Patterns
+        {
+            get { return m_Patterns; }
+        }
+
+        private int m_SelectedPatternID;
+        private int m_SelectedRoundID;
+
         private int m_CurrentRoundIDSelected;
 
         private void Start()
         {
-            LoadRoundsFromJSON();
+            LoadPatterns();
             m_RoundCounterUI.Init();
             m_CurrentRoundIDSelected = 0;
             SelectMenu(ETYPEMENU.MAINMENU);            
         }
 
-        private void LoadRoundsFromJSON()
+        private void LoadPatterns()
         {
-            //m_RoundList = new List<Round>();
             m_Patterns = new List<Pattern>();
+
             // Get current list of rounds
             List<string> listFiles = CCFileUtil.ListJSONFiles(false);
 
             DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
             
 
-            int nErrorRounds = 0;
             for (int i = 0; i < listFiles.Count; i++)
             {
                 Round round = new Round();
-                if (CCFileUtil.LoadRoundJSON(listFiles[i], out round))
-                {
-                    //m_RoundList.Add(round);
-                }
-                else
-                {
-                    nErrorRounds++;
 
-                    Debug.Log("[APPController] It was not possible to get the round");
-                }
+                bool roundLoaded = CCFileUtil.LoadRoundJSON(listFiles[i], out round);
 
-                // Check categorie
-                string[] splitted = listFiles[i].Split('_');
-                if (splitted != null && splitted.Length > 1)
+                if (roundLoaded)
                 {
-                    string nameDesign = splitted[1].ToLower().Trim();
-
-                    // Check if this design exist or new design
-                    bool found = false;
-                    int indexP = 0;
-                    for (indexP = 0; (indexP < m_Patterns.Count)&&(!found); indexP++)
+                    // Check categorie
+                    string[] splitted = listFiles[i].Split('_');
+                    if (splitted != null && splitted.Length > 1)
                     {
-                        if (m_Patterns[indexP].Name == nameDesign)
+                        string nameDesign = splitted[1].ToLower().Trim();
+
+                        // Check if this design exist or new design
+                        bool found = false;
+                        int indexP = 0;
+                        for (indexP = 0; (indexP < m_Patterns.Count) && (!found); indexP++)
                         {
-                            found = true;
-                            break;
+                            if (m_Patterns[indexP].Name == nameDesign)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                        {
+                            m_Patterns[indexP].Rounds.Add(round);
+                        }
+                        else
+                        {
+                            m_Patterns.Add(new Pattern(nameDesign, round));
                         }
                     }
-                    if (found)
-                    {
-                        m_Patterns[indexP].Rounds.Add(round);
-                    }else
-                    {
-                        m_Patterns.Add(new Pattern(nameDesign, round));
-                    }
                 }
-            }
-
-            if (nErrorRounds > 0)
-            {
-                DebugManager.Instance.Log("Errors(" + nErrorRounds + ")\n");
-            }
+            }            
         }
 
         public Round GetRoundById(int idPattern, int idRound)
@@ -137,7 +136,7 @@ namespace CCounter
         }*/
 
 
-        public List<string> GetListRounds()
+       /* public List<string> GetListRounds()
         {
             List<string> lTitles = new List<string>();
 
@@ -175,7 +174,7 @@ namespace CCounter
 
                         //titleRound += m_RoundList[i].Stiches[iStich].NumberRepeats.ToString() + " " + m_RoundList[i].Stiches[iStich].Abbr;
 
-                        if (iStich < m_RoundList[i].Stiches.Count - 1)
+                      /*  if (iStich < m_RoundList[i].Stiches.Count - 1)
                         {
                             titleRound += " , ";
                         }
@@ -191,15 +190,15 @@ namespace CCounter
             }
 
             return lTitles;
-        }
+        }*/
 
         public int SaveRound(Round round)
         {            
             CCFileUtil.SaveRoundToJSON(round);
-            m_RoundList.Add(round);
+            /*m_RoundList.Add(round);*/
             
 
-            return m_RoundList.Count;
+            return 0;
         }
 
         private void SelectMenu(ETYPEMENU menu)
@@ -208,7 +207,7 @@ namespace CCounter
             switch (menu)
             {
                 case ETYPEMENU.MAINMENU:
-
+                    m_TopBar.Title = "Counter Crotchet";
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Hide();
                     m_PartPattern.Hide();
@@ -218,6 +217,7 @@ namespace CCounter
 
                 case ETYPEMENU.PATTERNSETTINGS:
 
+                   
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Hide();
                     m_PartPattern.Show();
@@ -232,10 +232,36 @@ namespace CCounter
                     break;
 
                 case ETYPEMENU.ROUNDSELECTOR:
+                    m_TopBar.Title = "Counter Crotchet";
+
                     m_RoundCounterUI.Hide();
                     m_RoundSelectorUI.Show();
                     m_PartPattern.Hide();
                     m_MainMenuUI.Hide();
+                break;
+            }
+        }
+
+        public void OnBack()
+        {
+            switch (m_CurrentMenu)
+            {
+                case ETYPEMENU.MAINMENU:
+                    Application.Quit();
+                break;
+
+                case ETYPEMENU.PATTERNSETTINGS:
+
+
+                   
+                    break;
+
+                case ETYPEMENU.ROUNDCOUNTER:
+                   
+                    break;
+
+                case ETYPEMENU.ROUNDSELECTOR:
+                    
                 break;
             }
         }
@@ -260,14 +286,14 @@ namespace CCounter
             int nfiles = CCFileUtil.RemoveAllRounds();
             if (nfiles <= 0)
             {
-                m_MainMenuUI.ShowConfirm(" There weren't any rounds to remove.");
+                //m_MainMenuUI.ShowConfirm(" There weren't any rounds to remove.");
             }else if (nfiles == 1)
             {
-                m_MainMenuUI.ShowConfirm(" There was 1 round to remove.");
+               // m_MainMenuUI.ShowConfirm(" There was 1 round to remove.");
             }
             else
             {
-                m_MainMenuUI.ShowConfirm(nfiles + " have been removed ");
+               // m_MainMenuUI.ShowConfirm(nfiles + " have been removed ");
             }
 
         }
@@ -275,29 +301,29 @@ namespace CCounter
         public void OnShowRoundCounter(int idRound)
         {
             m_CurrentRoundIDSelected = idRound;
-            m_RoundCounterUI.SetRound(GetRoundById(m_CurrentRoundIDSelected));
+            //m_RoundCounterUI.SetRound(GetRoundById(m_CurrentRoundIDSelected));
 
             SelectMenu(ETYPEMENU.ROUNDCOUNTER);            
         }        
 
         public void FinishCurrentRoundInList(bool completed)
         {
-            Round round = GetRoundById(m_CurrentRoundIDSelected);
+            /*Round round = GetRoundById(m_CurrentRoundIDSelected);
 
             if (round != null)
             {
                 round.IsCompleted = completed;
                 CCFileUtil.SaveRoundToJSON(round);
-            }
+            }*/
         }
 
         public Round GetNextRoundInList()
         {
-            m_CurrentRoundIDSelected++;
+            /*m_CurrentRoundIDSelected++;
             if (m_CurrentRoundIDSelected < m_RoundList.Count)
             {
                 return m_RoundList[m_CurrentRoundIDSelected];
-            }
+            }*/
             return null;
         }
 

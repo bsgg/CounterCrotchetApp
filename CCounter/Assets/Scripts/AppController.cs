@@ -26,7 +26,7 @@ namespace CCounter
         }
         #endregion Instance
 
-        public enum ETYPEMENU {  MAINMENU, PATTERNSETTINGS, ROUNDSELECTOR, ROUNDCOUNTER };
+        public enum ETYPEMENU {  MAINMENU, PATTERNSETTINGS, ROUNDSELECTOR, ROUNDCOUNTER, PARTPATTERN };
 
         private ETYPEMENU m_CurrentMenu = ETYPEMENU.MAINMENU;
 
@@ -37,7 +37,7 @@ namespace CCounter
         private UIBase m_MainMenuUI;
 
         [SerializeField]
-        private PartPattern m_PartPattern;
+        private PartPatternSettings m_PartPatternSettings;
 
         [SerializeField]
         private RoundSelectorUI m_RoundSelectorUI;
@@ -45,6 +45,17 @@ namespace CCounter
         [SerializeField]
         private RoundCounterUI m_RoundCounterUI;
 
+        
+
+        [SerializeField]
+        private PartPattern m_PartPattern;
+
+        [SerializeField]
+        private MessagePopup m_MessagePopup;
+        public MessagePopup MessagePopup
+        {
+            get { return m_MessagePopup; }
+        }
 
         [SerializeField]
         private List<Pattern> m_Patterns;
@@ -114,14 +125,7 @@ namespace CCounter
             }            
         }
 
-        public Round GetRoundById(int idPattern, int idRound)
-        {
-            if ((m_Patterns == null) || (idPattern < 0) || (idPattern >= m_Patterns.Count)) return null;
-
-            if ((m_Patterns[idRound].Rounds == null) || (idRound < 0) || (idRound >= m_Patterns[idRound].Rounds.Count)) return null;
-
-            return m_Patterns[idPattern].Rounds[idRound];
-        }
+        /**/
 
         /*public int NumberRounds
         {
@@ -204,46 +208,59 @@ namespace CCounter
         private void SelectMenu(ETYPEMENU menu)
         {            
             m_CurrentMenu = menu;
+
+            // Hide all
+            m_RoundCounterUI.Hide();
+            m_RoundSelectorUI.Hide();
+            m_PartPattern.Hide();
+            m_MainMenuUI.Hide();
+            m_MessagePopup.Hide();
+            m_PartPatternSettings.Hide();
+
+
             switch (menu)
             {
                 case ETYPEMENU.MAINMENU:
                     m_TopBar.Title = "Counter Crotchet";
-                    m_RoundCounterUI.Hide();
-                    m_RoundSelectorUI.Hide();
-                    m_PartPattern.Hide();
+                    
                     m_MainMenuUI.Show();
 
                 break;
 
                 case ETYPEMENU.PATTERNSETTINGS:
+                    m_PartPatternSettings.Show();
 
-                   
-                    m_RoundCounterUI.Hide();
-                    m_RoundSelectorUI.Hide();
-                    m_PartPattern.Show();
-                    m_MainMenuUI.Hide();
                 break;
 
                 case ETYPEMENU.ROUNDCOUNTER:
                     m_RoundCounterUI.Show();
-                    m_RoundSelectorUI.Hide();
-                    m_PartPattern.Hide();
-                    m_MainMenuUI.Hide();
+
                     break;
 
                 case ETYPEMENU.ROUNDSELECTOR:
                     m_TopBar.Title = "Counter Crotchet";
 
-                    m_RoundCounterUI.Hide();
+
                     m_RoundSelectorUI.Show();
-                    m_PartPattern.Hide();
-                    m_MainMenuUI.Hide();
+
+                break;
+
+                case ETYPEMENU.PARTPATTERN:
+                    m_PartPattern.Show();
                 break;
             }
         }
 
         public void OnBack()
         {
+            // Hide all
+            m_RoundCounterUI.Hide();
+            m_RoundSelectorUI.Hide();
+            m_PartPattern.Hide();
+            m_MainMenuUI.Hide();
+            m_MessagePopup.Hide();
+            m_PartPatternSettings.Hide();
+
             switch (m_CurrentMenu)
             {
                 case ETYPEMENU.MAINMENU:
@@ -251,18 +268,12 @@ namespace CCounter
                 break;
 
                 case ETYPEMENU.PATTERNSETTINGS:
-
-
-                   
-                    break;
-
                 case ETYPEMENU.ROUNDCOUNTER:
-                   
-                    break;
-
                 case ETYPEMENU.ROUNDSELECTOR:
-                    
+                case ETYPEMENU.PARTPATTERN:
+                    m_MainMenuUI.Show();
                 break;
+                
             }
         }
 
@@ -326,6 +337,27 @@ namespace CCounter
             }*/
             return null;
         }
+
+
+
+        public void ShowRoundCounter(int idPattern, int idRound)
+        {
+            m_RoundCounterUI.SelectedRound = GetRoundById(idPattern, idRound);
+
+            SelectMenu(ETYPEMENU.ROUNDCOUNTER);
+        }
+
+
+        public Round GetRoundById(int idPattern, int idRound)
+        {
+            if ((m_Patterns == null) || (idPattern < 0) || (idPattern >= m_Patterns.Count)) return null;
+
+            if ((m_Patterns[idRound].Rounds == null) || (idRound < 0) || (idRound >= m_Patterns[idRound].Rounds.Count)) return null;
+
+            return m_Patterns[idPattern].Rounds[idRound];
+        }
+
+
 
     }
 }

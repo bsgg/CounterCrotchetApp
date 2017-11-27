@@ -11,13 +11,13 @@ namespace CCounter
         private Text m_Title;
 
         [SerializeField] private RoundUI m_Round;
-        [SerializeField] private MessagePopup m_MessagePopup;
+        //[SerializeField] private MessagePopup m_MessagePopup;
 
 
 
 
-        [SerializeField] private PartPatternSettings m_PartSettings;
-        [SerializeField] private SaveRoundSettings m_SaveRoundSettings;
+        //[SerializeField] private PartPatternSettings m_PartSettings;
+        //[SerializeField] private SaveRoundSettings m_SaveRoundSettings;
 
         private List<Stich> m_ListStiches;
         private Round m_CurrentRound;
@@ -29,20 +29,20 @@ namespace CCounter
             m_ListStiches = new List<Stich>();
 
             m_Round.Show();
-            m_PartSettings.Show();
+           // m_PartSettings.Show();
 
-            m_SaveRoundSettings.Hide();
-            m_MessagePopup.Hide();
+            //m_SaveRoundSettings.Hide();
+            //m_MessagePopup.Hide();
         }
 
         public void OnAcceptPartSettings()
         {
-            m_PartSettings.Hide();
+           // m_PartSettings.Hide();
 
             // Create round
             m_CurrentRound = new Round();
-            m_CurrentRound.PartName = m_PartSettings.PartName;
-            m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;
+            /*m_CurrentRound.PartName = m_PartSettings.PartName;
+            m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;*/
 
             m_Title.text = m_CurrentRound.PartName + " Round: " + m_CurrentRound.RoundNumber;
         }
@@ -62,11 +62,11 @@ namespace CCounter
             }
             else
             {
-                m_MessagePopup.ShowPopup(
+                /*m_MessagePopup.ShowPopup(
                    "Warning",
                    "Add at least 1 stich",
                    "Ok", OnOkBtn,
-                   string.Empty, null, string.Empty, null);
+                   string.Empty, null, string.Empty, null);*/
             }
         }
 
@@ -115,7 +115,7 @@ namespace CCounter
 
         private void OnOkBtn()
         {
-            m_MessagePopup.Hide();
+           // m_MessagePopup.Hide();
         }
 
         public void OnSaveRound()
@@ -159,16 +159,16 @@ namespace CCounter
                 // Save current round in JSON and create new round 
                 int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
 
-                m_MessagePopup.ShowPopup(
+               /* m_MessagePopup.ShowPopup(
                   "Message",
                   "Round: " + numberRounds + " Stiches: " + m_CurrentRound.TotalNumberStiches,
                   "Ok", OnOkBtn,
-                  string.Empty, null, string.Empty, null);
+                  string.Empty, null, string.Empty, null);*/
 
                 // Update Round
                 int indexRound =  m_CurrentRound.RoundNumber + 1;
                 m_CurrentRound = new Round();
-                m_CurrentRound.PartName = m_PartSettings.PartName;
+                //m_CurrentRound.PartName = m_PartSettings.PartName;
                 m_CurrentRound.RoundNumber = indexRound;
 
                 m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
@@ -178,11 +178,11 @@ namespace CCounter
             }
             else
             {
-                m_MessagePopup.ShowPopup(
+                /*m_MessagePopup.ShowPopup(
                     "Warning",
                     "There are no stiches in this round",
                     "Ok", OnOkBtn,
-                    string.Empty, null, string.Empty, null);
+                    string.Empty, null, string.Empty, null);*/
             }
         }
        

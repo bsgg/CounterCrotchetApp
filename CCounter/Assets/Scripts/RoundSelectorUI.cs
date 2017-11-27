@@ -10,7 +10,6 @@ namespace CCounter
     {
         [SerializeField] private ScrollPanelUI m_RoundListScroll;
 
-
         private int m_SelectedPattern;
         private int m_SelectedRound;
 
@@ -79,6 +78,8 @@ namespace CCounter
         {
             m_RoundListScroll.OnButtonPress -= OnRoundPress;
             m_SelectedRound = id;
+
+            AppController.Instance.ShowRoundCounter(m_SelectedPattern, m_SelectedRound);
         }        
         
     }

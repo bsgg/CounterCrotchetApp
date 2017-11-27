@@ -15,14 +15,13 @@ namespace CCounter
         private Toggle m_RoundCompletedToggle;
 
         private int m_CurrentCounter = 0;
-        private Round m_CurrentRound;
-       
-        public override void Init()
+        private Round m_SelectedRound;
+        public Round SelectedRound
         {
-            base.Init();
+            set { m_SelectedRound = value; }
+        }
 
-            m_CurrentRound = new Round();
-        }       
+
 
         public override void Hide()
         {            
@@ -30,36 +29,43 @@ namespace CCounter
             base.Hide();
         }
 
-        public void SetRound( Round round)
+        public override void Show()
         {
-            m_CurrentRound = round;
+            SetRound();
+
+            base.Show();
+
+        }
+
+        public void SetRound()
+        {
             m_CurrentCounter = 0;
 
-            if (m_CurrentRound != null)
+            if (m_SelectedRound != null)
             {
-                if (m_CurrentRound.IsCompleted)
+                /*if (m_CurrentCounter.IsCompleted)
                 {
                     m_RoundCompletedToggle.isOn = true;
                 }
                 else
                 {
                     m_RoundCompletedToggle.isOn = false;
-                }
+                }*/
 
-                m_RoundDescription.text = "R" + m_CurrentRound.RoundNumber.ToString() + ":";
+                m_RoundDescription.text = "R" + m_SelectedRound.RoundNumber.ToString() + ":";
 
-                if (m_CurrentRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
+                if (m_SelectedRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
                 {
-                    m_RoundDescription.text = "(Front Loops) - R" + m_CurrentRound.RoundNumber.ToString() + ":";
+                    m_RoundDescription.text = "(Front Loops) - R" + m_SelectedRound.RoundNumber.ToString() + ":";
                 }
-                else if (m_CurrentRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
+                else if (m_SelectedRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
                 {
-                    m_RoundDescription.text = "(Back Loops) - R" + m_CurrentRound.RoundNumber.ToString() + ":";
+                    m_RoundDescription.text = "(Back Loops) - R" + m_SelectedRound.RoundNumber.ToString() + ":";
                 }               
 
 
                 //int numberStiches = 0;
-                for (int iStich = 0; iStich < m_CurrentRound.Stiches.Count; iStich++)
+                for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
                 {
                     /*if (m_CurrentRound.Stiches[iStich].SpecialStich && !m_CurrentRound.Stiches[iStich].CountAsStich)
                     {
@@ -69,21 +75,21 @@ namespace CCounter
                         m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
                     }*/
 
-                    if (iStich < m_CurrentRound.Stiches.Count - 1)
+                    if (iStich < m_SelectedRound.Stiches.Count - 1)
                     {
                         m_RoundDescription.text += " , ";
                     }
                 }
 
-                if (m_CurrentRound.Repeats > 1)
+                if (m_SelectedRound.Repeats > 1)
                 {
-                    m_RoundDescription.text += "  - Repeat x " + m_CurrentRound.Repeats.ToString();
+                    m_RoundDescription.text += "  - Repeat x " + m_SelectedRound.Repeats.ToString();
                 }
-                m_RoundDescription.text += " (" + round.TotalNumberStiches + " stiches)";
+                m_RoundDescription.text += " (" + m_SelectedRound.TotalNumberStiches + " stiches)";
 
                // Add number stiches 
                 List <string> listStiches = new List<string>();
-                for (int iStich = 0; iStich < m_CurrentRound.AllRepeatsStiches.Count; iStich++)
+                for (int iStich = 0; iStich < m_SelectedRound.AllRepeatsStiches.Count; iStich++)
                 {
                     string stich = "";
                     /*if (m_CurrentRound.AllRepeatsStiches[iStich].SpecialStich && !m_CurrentRound.AllRepeatsStiches[iStich].CountAsStich)
@@ -121,7 +127,7 @@ namespace CCounter
 
         void Update()
         {
-            if (m_CurrentRound != null)
+            if (m_SelectedRound != null)
             {
                 if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return))
                 {
@@ -141,7 +147,7 @@ namespace CCounter
         public void OnNextRound()
         {
             // Last  group, check round and get next one
-            AppController.Instance.FinishCurrentRoundInList(m_RoundCompletedToggle.isOn);
+           /* AppController.Instance.FinishCurrentRoundInList(m_RoundCompletedToggle.isOn);
 
             Round round = AppController.Instance.GetNextRoundInList();
 
@@ -152,7 +158,7 @@ namespace CCounter
             else
             {
                 Debug.Log("[ROUNDCOUNTERUI] NO MORE ROUNDS");
-            }
+            }*/
         }
 
     }

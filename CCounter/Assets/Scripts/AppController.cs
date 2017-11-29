@@ -232,6 +232,10 @@ namespace CCounter
 
                 break;
 
+                case ETYPEMENU.PARTPATTERN:
+                    m_PartPattern.Show();
+                break;
+
                 case ETYPEMENU.ROUNDCOUNTER:
                     m_RoundCounterUI.Show();
 
@@ -245,9 +249,7 @@ namespace CCounter
 
                 break;
 
-                case ETYPEMENU.PARTPATTERN:
-                    m_PartPattern.Show();
-                break;
+                
             }
         }
 
@@ -277,10 +279,18 @@ namespace CCounter
             }
         }
 
-        public void OnAddNewPatternPart()
+        #region NewDesign
+        public void OnAddNewDesign()
         {
             SelectMenu(ETYPEMENU.PATTERNSETTINGS);
         }
+
+        public void OnAcceptNewDesign()
+        {
+            m_PartPattern.CreateNewRound(m_PartPatternSettings.PartName, m_PartPatternSettings.PartStartIndex);
+            SelectMenu(ETYPEMENU.PARTPATTERN);
+        }
+        #endregion NewDesign
 
         public void OnShowMainMenu()
         {

@@ -7,8 +7,6 @@ namespace CCounter
 {
     public class PartPattern : UIBase
     {
-        [SerializeField]
-        private Text m_Title;
 
         [SerializeField] private RoundUI m_Round;
         //[SerializeField] private MessagePopup m_MessagePopup;
@@ -22,11 +20,21 @@ namespace CCounter
         private List<Stich> m_ListStiches;
         private Round m_CurrentRound;
 
+
+        public void CreateNewRound(string name, int roundNumber)
+        {
+            m_CurrentRound = new Round();
+            m_CurrentRound.PartName = name;
+            m_CurrentRound.RoundNumber = roundNumber;
+        }
+
         public override void Show()
         {
             base.Show();
 
+           
             m_ListStiches = new List<Stich>();
+           
 
             m_Round.Show();
            // m_PartSettings.Show();
@@ -35,17 +43,17 @@ namespace CCounter
             //m_MessagePopup.Hide();
         }
 
-        public void OnAcceptPartSettings()
+        /*public void OnAcceptPartSettings()
         {
            // m_PartSettings.Hide();
 
             // Create round
-            m_CurrentRound = new Round();
-            /*m_CurrentRound.PartName = m_PartSettings.PartName;
-            m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;*/
+            
+            m_CurrentRound.PartName = m_Round..PartName;
+            m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;
 
-            m_Title.text = m_CurrentRound.PartName + " Round: " + m_CurrentRound.RoundNumber;
-        }
+
+        }*/
 
         public void AddStich()
         {
@@ -171,7 +179,7 @@ namespace CCounter
                 //m_CurrentRound.PartName = m_PartSettings.PartName;
                 m_CurrentRound.RoundNumber = indexRound;
 
-                m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
+                //m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
 
                 m_ListStiches = new List<Stich>();
                 m_Round.Reset();

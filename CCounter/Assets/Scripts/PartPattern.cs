@@ -143,7 +143,6 @@ namespace CCounter
                     m_CurrentRound.Stiches.Add(stich);
                 }
 
-
                 for (int iRepeat = 0; iRepeat < m_CurrentRound.Repeats; iRepeat++)
                 {
                     for (int iStich = 0; iStich < m_ListStiches.Count; iStich++)

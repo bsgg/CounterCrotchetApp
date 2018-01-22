@@ -21,6 +21,10 @@ namespace CCounter
             get { return m_Stich.text; }
         }
         [SerializeField] private InputField m_Repeats;
+
+        [SerializeField]
+        private Toggle m_NoDuplicateStichToogle;
+
         //private int m_StichSelected = 0;
 
 
@@ -64,6 +68,14 @@ namespace CCounter
             }
         }
 
+        public bool NoDuplicate
+        {
+            get
+            {
+                return m_BackLoopToggle.isOn;
+            }
+        }
+
         public Round.ETYPEROUND TypeRound
         {
             get
@@ -104,11 +116,14 @@ namespace CCounter
             m_Stich.text = string.Empty;
             m_Repeats.text = "1";
 
+            m_NoDuplicateStichToogle.isOn = false;
+
 
             m_RoundRepeats.text = "1";
             m_NormalToggle.isOn = true;
             m_FrongLoopToggle.isOn = false;
             m_BackLoopToggle.isOn = false;
+            
         }
     }
 }

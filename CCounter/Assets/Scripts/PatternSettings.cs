@@ -24,13 +24,13 @@ namespace CCounter
    
         public string Name;        
         public int NumberRepeats;
-        public bool RepeatStich;        
+        public bool DuplicateStich;        
 
         public Stich()
         {
             Name = "";
             NumberRepeats = 0;
-            RepeatStich = true;
+            DuplicateStich = true;
         }
     }
 

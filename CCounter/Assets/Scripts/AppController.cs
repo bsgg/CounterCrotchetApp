@@ -95,18 +95,24 @@ namespace CCounter
 
                 if (roundLoaded)
                 {
+
                     // Check categorie
                     string[] splitted = listFiles[i].Split('_');
                     if (splitted != null && splitted.Length > 1)
                     {
-                        string nameDesign = splitted[1].ToLower().Trim();
+                        string designName = splitted[1].Trim();
+
+                        //Debug.Log("[AppController.LoadPatterns] designName " + designName);
+
+                        
+                        //string designNameLower = designName.ToLower();
 
                         // Check if this design exist or new design
                         bool found = false;
                         int indexP = 0;
                         for (indexP = 0; (indexP < m_Patterns.Count) && (!found); indexP++)
                         {
-                            if (m_Patterns[indexP].Name == nameDesign)
+                            if (m_Patterns[indexP].Name.ToLower() == designName.ToLower())
                             {
                                 found = true;
                                 break;
@@ -114,15 +120,22 @@ namespace CCounter
                         }
                         if (found)
                         {
+                            //Debug.Log("[AppController.LoadPatterns] New round for a pattern " + designName);
+
                             m_Patterns[indexP].Rounds.Add(round);
                         }
                         else
                         {
-                            m_Patterns.Add(new Pattern(nameDesign, round));
+                            //Debug.Log("[AppController.LoadPatterns] New pattern " + designName);
+
+                            m_Patterns.Add(new Pattern(designName, round));
                         }
                     }
                 }
-            }            
+            }
+
+            Debug.Log("[AppController.LoadPatterns] m_Patterns count " + m_Patterns.Count);
+
         }
 
         /**/
@@ -243,13 +256,8 @@ namespace CCounter
 
                 case ETYPEMENU.ROUNDSELECTOR:
                     m_TopBar.Title = "Counter Crotchet";
-
-
                     m_RoundSelectorUI.Show();
-
-                break;
-
-                
+                break;                
             }
         }
 
@@ -362,7 +370,7 @@ namespace CCounter
         {
             if ((m_Patterns == null) || (idPattern < 0) || (idPattern >= m_Patterns.Count)) return null;
 
-            if ((m_Patterns[idRound].Rounds == null) || (idRound < 0) || (idRound >= m_Patterns[idRound].Rounds.Count)) return null;
+            if ((m_Patterns[idPattern].Rounds == null) || (idRound < 0) || (idRound >= m_Patterns[idPattern].Rounds.Count)) return null;
 
             return m_Patterns[idPattern].Rounds[idRound];
         }

@@ -42,31 +42,65 @@ namespace CCounter
             m_CurrentCounter = 0;
 
             if (m_SelectedRound != null)
-            {
-                /*if (m_CurrentCounter.IsCompleted)
-                {
-                    m_RoundCompletedToggle.isOn = true;
-                }
-                else
-                {
-                    m_RoundCompletedToggle.isOn = false;
-                }*/
+            {               
 
                 m_RoundDescription.text = "R" + m_SelectedRound.RoundNumber.ToString() + ":";
 
                 if (m_SelectedRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
                 {
-                    m_RoundDescription.text = "(Front Loops) - R" + m_SelectedRound.RoundNumber.ToString() + ":";
+                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " (FLO): ";
                 }
                 else if (m_SelectedRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
                 {
-                    m_RoundDescription.text = "(Back Loops) - R" + m_SelectedRound.RoundNumber.ToString() + ":";
-                }               
+                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " (BLO): ";
+                }else
+                {
+                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " : ";
+                }
+
+                if (m_SelectedRound.Stiches != null)
+                {
+                    string stiches = "";
+                    for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
+                    {
+                        stiches += m_SelectedRound.Stiches[iStich].NumberRepeats + m_SelectedRound.Stiches[iStich].Name;
+                        if (iStich < (m_SelectedRound.Stiches[iStich].NumberRepeats - 1))
+                        {
+                            stiches += " , ";
+                        }
+                    }
+
+                    m_RoundDescription.text += stiches;
+
+
+                    // Add all stiches
+                    List<string> listStiches = new List<string>();
+                    for (int iRepeat = 0; iRepeat < m_SelectedRound.Repeats; iRepeat++)
+                    {
+                        for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
+                        {
+                            string st = m_SelectedRound.Stiches[iStich].NumberRepeats + "  " + m_SelectedRound.Stiches[iStich].Name.ToUpper();
+                            listStiches.Add(st);
+                        }
+                    }
+                    m_CounterRoundListScroll.InitScroll(listStiches);
+                    m_CounterRoundListScroll.OnButtonPress += OnButtonMenuPress;
+                }
+
 
 
                 //int numberStiches = 0;
-                for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
+
+
+
+                /*for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
                 {
+
+
+
+
+
+
                     /*if (m_CurrentRound.Stiches[iStich].SpecialStich && !m_CurrentRound.Stiches[iStich].CountAsStich)
                     {
                         m_RoundDescription.text += " " + m_CurrentRound.Stiches[iStich].Name;
@@ -75,20 +109,20 @@ namespace CCounter
                         m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
                     }*/
 
-                    if (iStich < m_SelectedRound.Stiches.Count - 1)
+                  /*  if (iStich < m_SelectedRound.Stiches.Count - 1)
                     {
                         m_RoundDescription.text += " , ";
-                    }
-                }
+                    }*/
+                /*}
 
                 if (m_SelectedRound.Repeats > 1)
                 {
                     m_RoundDescription.text += "  - Repeat x " + m_SelectedRound.Repeats.ToString();
                 }
-                m_RoundDescription.text += " (" + m_SelectedRound.TotalNumberStiches + " stiches)";
+                m_RoundDescription.text += " (" + m_SelectedRound.StichCount + " stiches)";*/
 
                // Add number stiches 
-                List <string> listStiches = new List<string>();
+                /*List <string> listStiches = new List<string>();
                 for (int iStich = 0; iStich < m_SelectedRound.AllRepeatsStiches.Count; iStich++)
                 {
                     string stich = "";
@@ -100,11 +134,10 @@ namespace CCounter
                     {
                         stich = m_CurrentRound.AllRepeatsStiches[iStich].NumberRepeats + " " + m_CurrentRound.AllRepeatsStiches[iStich].Abbr.ToString();
                     }*/
-                    listStiches.Add(stich);
-                }
+                   /* listStiches.Add(stich);
+                }*/
 
-                m_CounterRoundListScroll.InitScroll(listStiches);
-                m_CounterRoundListScroll.OnButtonPress += OnButtonMenuPress;
+                
             }
         }
 

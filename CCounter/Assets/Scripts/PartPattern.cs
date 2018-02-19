@@ -9,6 +9,8 @@ namespace CCounter
     {
 
         [SerializeField] private RoundUI m_Round;
+
+        private string m_PartName;
         //[SerializeField] private MessagePopup m_MessagePopup;
 
 
@@ -24,6 +26,7 @@ namespace CCounter
         public void CreateNewRound(string name, int roundNumber)
         {
             m_CurrentRound = new Round();
+            m_PartName = name;
             m_CurrentRound.PartName = name;
             m_CurrentRound.RoundNumber = roundNumber;
         }
@@ -121,18 +124,13 @@ namespace CCounter
             return stiches;
         }
 
-        private void OnOkBtn()
-        {
-           // m_MessagePopup.Hide();
-        }
-
         public void OnSaveRound()
         {
             if (m_ListStiches.Count > 0)
             {
                 m_CurrentRound.Repeats = m_Round.RoundRepeat;
                 
-                m_CurrentRound.TotalNumberStiches = 0;
+                m_CurrentRound.StichCount = 0;
 
                 m_CurrentRound.Stiches = new List<Stich>();
                 m_CurrentRound.AllRepeatsStiches = new List<Stich>();
@@ -150,7 +148,7 @@ namespace CCounter
                         Stich stich = m_ListStiches[iStich];
 
                         m_CurrentRound.AllRepeatsStiches.Add(stich);
-                        m_CurrentRound.TotalNumberStiches += stich.NumberRepeats;
+                        m_CurrentRound.StichCount += stich.NumberRepeats;
 
                         // Find incremental 
                         string auxS = stich.Name.TrimStart().TrimEnd().ToLower();
@@ -158,7 +156,7 @@ namespace CCounter
                         {
                             // TODO STICH NUMBER X 2
                             Debug.Log("Number Stiches x2");
-                            m_CurrentRound.TotalNumberStiches += (stich.NumberRepeats * 2);
+                            m_CurrentRound.StichCount += (stich.NumberRepeats * 2);
                         }
                     }
                 }
@@ -166,32 +164,34 @@ namespace CCounter
                 // Save current round in JSON and create new round 
                 int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
 
-               /* m_MessagePopup.ShowPopup(
-                  "Message",
-                  "Round: " + numberRounds + " Stiches: " + m_CurrentRound.TotalNumberStiches,
-                  "Ok", OnOkBtn,
-                  string.Empty, null, string.Empty, null);*/
-
-                // Update Round
-                int indexRound =  m_CurrentRound.RoundNumber + 1;
-                m_CurrentRound = new Round();
-                //m_CurrentRound.PartName = m_PartSettings.PartName;
-                m_CurrentRound.RoundNumber = indexRound;
-
                 //m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
+                int indexRound = m_CurrentRound.RoundNumber + 1;
+                string message = "Round: " + indexRound + " saved with " + m_CurrentRound.StichCount + " stich(es)";
+                AppController.Instance.MessagePopup.ShowPopup("Round saved", message,
+                    "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
+
+
+                // Reset all                
+                m_CurrentRound = new Round();
+                m_CurrentRound.PartName = m_PartName;
+                m_CurrentRound.RoundNumber = indexRound;                
 
                 m_ListStiches = new List<Stich>();
                 m_Round.Reset();
             }
             else
             {
-                /*m_MessagePopup.ShowPopup(
-                    "Warning",
-                    "There are no stiches in this round",
-                    "Ok", OnOkBtn,
-                    string.Empty, null, string.Empty, null);*/
+                AppController.Instance.MessagePopup.ShowPopup("No stiches",
+                    "Include some stiches for the round",
+                    "Ok", OnOkPopupBtnPress, 
+                    string.Empty, null, string.Empty, null);
             }
         }
-       
-	}
+
+        private void OnOkPopupBtnPress()
+        {
+            AppController.Instance.MessagePopup.Hide();
+        }
+
+    }
 }

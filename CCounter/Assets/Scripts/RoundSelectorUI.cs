@@ -40,7 +40,7 @@ namespace CCounter
             m_SelectedPattern = id;
 
             LoadRoundsList();
-            m_RoundListScroll.OnButtonPress += OnRoundPress;
+            
         }
 
         private void LoadRoundsList()
@@ -52,26 +52,46 @@ namespace CCounter
                 string title = "";
                 if (r.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
                 {
-                    title = r.PartName + " - R" + r.RoundNumber + " (Front Loops): ";
+                   // title = r.PartName + " - R" + r.RoundNumber + " (Front Loops): ";
+                    title ="R" + r.RoundNumber + " (FLO): ";
                 }
                 else if (r.TypeRound == Round.ETYPEROUND.BACKLOOP)
                 {
-                    title = r.PartName + " - R" + r.RoundNumber + " (Back Loops): ";
+                    //title = r.PartName + " - R" + r.RoundNumber + " (Back Loops): ";
+                    title = "R" + r.RoundNumber + " (BLO): ";
                 }
                 else
                 {
-                    title = r.PartName + " - R" + r.RoundNumber + " : ";
+                    //title = r.PartName + " - R" + r.RoundNumber + " : ";
+                    title = "R" + r.RoundNumber + ": ";
                 }
 
-                title += r.RoundNumber;
-                if (r.Repeats > 1)
+                if (r.Stiches != null)
                 {
-                    title += "  - Repeat x " + r.Repeats.ToString();
+                    //Debug.Log("[RoundSelectorUI.LoadRoundsList] Stiches " + r.Stiches.Count + " for: " + r.PartName + " " + r.RoundNumber);
+                    for (int s = 0; s < r.Stiches.Count; s++)
+                    {
+                        title += r.Stiches[s].NumberRepeats + r.Stiches[s].Name;
+                        if (s < (r.Stiches[s].NumberRepeats-1))
+                        {
+                            title += ", ";
+                        }
+                    }
+
+                    //title += r.RoundNumber;
+                    if (r.Repeats > 1)
+                    {
+                        title += " x " + r.Repeats.ToString();
+                    }
+                }else
+                {
+                    Debug.Log("[RoundSelectorUI.LoadRoundsList] No stiches for " + r.PartName + " " + r.RoundNumber);
                 }
 
                 lTitle.Add(title);
             }
             m_RoundListScroll.InitScroll(lTitle);
+            m_RoundListScroll.OnButtonPress += OnRoundPress;
         }
 
         private void OnRoundPress(int id)

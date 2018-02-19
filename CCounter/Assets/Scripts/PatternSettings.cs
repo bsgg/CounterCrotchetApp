@@ -46,7 +46,7 @@ namespace CCounter
         
         public List<Stich> Stiches;
         public List<Stich> AllRepeatsStiches;
-        public int TotalNumberStiches;
+        public int StichCount;
         public bool IsCompleted = false;        
 
         public Round()
@@ -56,7 +56,7 @@ namespace CCounter
             RoundNumber = 0;
             Stiches = new List<Stich>();
             AllRepeatsStiches = new List<Stich>();
-            TotalNumberStiches = 0;
+            StichCount = 0;
             IsCompleted = false;
         }
     }

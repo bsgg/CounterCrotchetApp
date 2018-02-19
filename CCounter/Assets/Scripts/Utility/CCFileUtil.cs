@@ -83,21 +83,26 @@ namespace CCounter
             if (!File.Exists(pathFile))
             {
                 DebugManager.Instance.Log("FileNotFound: " + pathFile + "\n");
+                Debug.Log("[CCFileUtil.LoadRoundJSON] File Not Found: " + pathFile + "\n");
             }
             else
             {
                 DebugManager.Instance.Log("File: " + pathFile + "\n");
+                //Debug.Log("[CCFileUtil.LoadRoundJSON] File found: " + pathFile + "\n");
                 try
                 {
                     string jsonString = File.ReadAllText(pathFile);
                     if (!string.IsNullOrEmpty(jsonString))
                     {
                         rounData = JsonMapper.ToObject<Round>(jsonString);
+                        Debug.Log("[CCFileUtil.LoadRoundJSON] Load Json file: " + rounData.PartName);
+
                         return true;
                     }
                     else
                     {
                         DebugManager.Instance.Log("jsonString is null or empty\n");
+                        Debug.Log("[CCFileUtil.LoadRoundJSON] json file " + pathFile + " null or empty");
                         return false;
                     }
 
@@ -106,6 +111,7 @@ namespace CCounter
                 {
 
                     DebugManager.Instance.Log("Mal formed File: " + pathFile);
+                    Debug.Log("[CCFileUtil.LoadRoundJSON] unable to parse " + pathFile + " malformed json format");
                     return false;
 
                 }

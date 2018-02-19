@@ -118,7 +118,6 @@ namespace CCounter
 
             m_NoDuplicateStichToogle.isOn = false;
 
-
             m_RoundRepeats.text = "1";
             m_NormalToggle.isOn = true;
             m_FrongLoopToggle.isOn = false;

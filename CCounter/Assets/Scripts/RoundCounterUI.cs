@@ -85,58 +85,7 @@ namespace CCounter
                     }
                     m_CounterRoundListScroll.InitScroll(listStiches);
                     m_CounterRoundListScroll.OnButtonPress += OnButtonMenuPress;
-                }
-
-
-
-                //int numberStiches = 0;
-
-
-
-                /*for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
-                {
-
-
-
-
-
-
-                    /*if (m_CurrentRound.Stiches[iStich].SpecialStich && !m_CurrentRound.Stiches[iStich].CountAsStich)
-                    {
-                        m_RoundDescription.text += " " + m_CurrentRound.Stiches[iStich].Name;
-                    }else
-                    {
-                        m_RoundDescription.text += m_CurrentRound.Stiches[iStich].NumberRepeats.ToString() + " " + m_CurrentRound.Stiches[iStich].Abbr;
-                    }*/
-
-                  /*  if (iStich < m_SelectedRound.Stiches.Count - 1)
-                    {
-                        m_RoundDescription.text += " , ";
-                    }*/
-                /*}
-
-                if (m_SelectedRound.Repeats > 1)
-                {
-                    m_RoundDescription.text += "  - Repeat x " + m_SelectedRound.Repeats.ToString();
-                }
-                m_RoundDescription.text += " (" + m_SelectedRound.StichCount + " stiches)";*/
-
-               // Add number stiches 
-                /*List <string> listStiches = new List<string>();
-                for (int iStich = 0; iStich < m_SelectedRound.AllRepeatsStiches.Count; iStich++)
-                {
-                    string stich = "";
-                    /*if (m_CurrentRound.AllRepeatsStiches[iStich].SpecialStich && !m_CurrentRound.AllRepeatsStiches[iStich].CountAsStich)
-                    {
-                        stich = " " + m_CurrentRound.AllRepeatsStiches[iStich].Name;
-                    }
-                    else
-                    {
-                        stich = m_CurrentRound.AllRepeatsStiches[iStich].NumberRepeats + " " + m_CurrentRound.AllRepeatsStiches[iStich].Abbr.ToString();
-                    }*/
-                   /* listStiches.Add(stich);
-                }*/
-
+                }               
                 
             }
         }
@@ -169,10 +118,6 @@ namespace CCounter
                         OnButtonMenuPress(m_CurrentCounter);
                         m_CurrentCounter++;
                     }
-                    /*else
-                    {
-                        OnNextRound();
-                    }*/
                 }
             }
         }

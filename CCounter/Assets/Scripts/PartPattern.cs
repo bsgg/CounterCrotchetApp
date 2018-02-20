@@ -11,13 +11,7 @@ namespace CCounter
         [SerializeField] private RoundUI m_Round;
 
         private string m_PartName;
-        //[SerializeField] private MessagePopup m_MessagePopup;
-
-
-
-
-        //[SerializeField] private PartPatternSettings m_PartSettings;
-        //[SerializeField] private SaveRoundSettings m_SaveRoundSettings;
+        private int m_RoundNumber;
 
         private List<Stich> m_ListStiches;
         private Round m_CurrentRound;
@@ -25,38 +19,25 @@ namespace CCounter
 
         public void CreateNewRound(string name, int roundNumber)
         {
-            m_CurrentRound = new Round();
             m_PartName = name;
-            m_CurrentRound.PartName = name;
-            m_CurrentRound.RoundNumber = roundNumber;
+            m_RoundNumber = roundNumber;
+
+            m_CurrentRound = new Round();            
+            m_CurrentRound.PartName = m_PartName;
+            m_CurrentRound.RoundNumber = m_RoundNumber;
         }
 
         public override void Show()
         {
             base.Show();
-
            
-            m_ListStiches = new List<Stich>();
-           
+            m_ListStiches = new List<Stich>();          
 
             m_Round.Show();
-           // m_PartSettings.Show();
 
-            //m_SaveRoundSettings.Hide();
-            //m_MessagePopup.Hide();
+            AppController.Instance.TopBar.Title = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
         }
-
-        /*public void OnAcceptPartSettings()
-        {
-           // m_PartSettings.Hide();
-
-            // Create round
-            
-            m_CurrentRound.PartName = m_Round..PartName;
-            m_CurrentRound.RoundNumber = m_PartSettings.PartStartIndex;
-
-
-        }*/
+        
 
         public void AddStich()
         {
@@ -154,7 +135,6 @@ namespace CCounter
                         string auxS = stich.Name.TrimStart().TrimEnd().ToLower();
                         if (auxS.Contains("inc") || auxS.Contains("incremental"))
                         {
-                            // TODO STICH NUMBER X 2
                             Debug.Log("Number Stiches x2");
                             m_CurrentRound.StichCount += (stich.NumberRepeats * 2);
                         }
@@ -164,20 +144,22 @@ namespace CCounter
                 // Save current round in JSON and create new round 
                 int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
 
-                //m_Title.text = m_CurrentRound.PartName + "  - Round: " + m_CurrentRound.RoundNumber;
-                int indexRound = m_CurrentRound.RoundNumber + 1;
-                string message = "Round: " + indexRound + " saved with " + m_CurrentRound.StichCount + " stich(es)";
-                AppController.Instance.MessagePopup.ShowPopup("Round saved", message,
+                string message = "Round " + m_RoundNumber + " - " + m_CurrentRound.StichCount + " stich(es)";
+                AppController.Instance.MessagePopup.ShowPopup("New round added", message,
                     "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
 
 
-                // Reset all                
+                // Reset all 
+                m_RoundNumber += 1;
                 m_CurrentRound = new Round();
                 m_CurrentRound.PartName = m_PartName;
-                m_CurrentRound.RoundNumber = indexRound;                
+                m_CurrentRound.RoundNumber = m_RoundNumber; 
 
                 m_ListStiches = new List<Stich>();
                 m_Round.Reset();
+
+                AppController.Instance.TopBar.Title = m_PartName + "  - Round: " + m_CurrentRound.RoundNumber;
+
             }
             else
             {

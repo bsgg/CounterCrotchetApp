@@ -32,6 +32,10 @@ namespace CCounter
 
         [SerializeField]
         private TopBar m_TopBar;
+        public TopBar TopBar
+        {
+            get { return m_TopBar; }
+        }
 
         [SerializeField]
         private UIBase m_MainMenuUI;

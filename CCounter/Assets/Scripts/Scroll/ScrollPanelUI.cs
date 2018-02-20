@@ -63,7 +63,7 @@ namespace ScrollList
             }
         }
 
-        public int NumberElements()
+        public int Num()
         {
             if (m_ListElements != null)
             {
@@ -72,7 +72,7 @@ namespace ScrollList
             return 0;
         }
 
-        public GameObject GetElement(int index)
+        public GameObject Get(int index)
         {
             if (m_ListElements != null && index < m_ListElements.Count)
             {

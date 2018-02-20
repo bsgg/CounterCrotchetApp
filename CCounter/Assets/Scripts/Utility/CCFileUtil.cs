@@ -7,11 +7,26 @@ using System.Collections.Generic;
 
 namespace CCounter
 {
-    public class CCFileUtil
+    public class CCFileUtil: MonoBehaviour
     {
+        [SerializeField] private string m_PatternFolder = "Patterns";
+
+        public void Init()
+        {
+            string localDirectory = Path.Combine(Application.persistentDataPath,m_PatternFolder);
+
+            
+
+            Debug.Log("localDirectory " + localDirectory);
+
+        }
+
+
         public static string PATHJSONFILES = "/Resources/Patterns/";
 
-        public static void SaveRoundToJSON(Round round)
+
+
+        public void SaveRoundToJSON(Round round)
         {
             string root = Application.dataPath + PATHJSONFILES;
 
@@ -46,7 +61,7 @@ namespace CCounter
             }
         }
 
-        public static List<string> ListJSONFiles(bool includePath = false)
+        public List<string> ListJSONFiles(bool includePath = false)
         {
             List<string> lfiles = new List<string>();
             // Get name files
@@ -75,7 +90,7 @@ namespace CCounter
             return lfiles;
         }
 
-        public static bool LoadRoundJSON(string fileName, out Round rounData)
+        public bool LoadRoundJSON(string fileName, out Round rounData)
         {
             rounData = null;
 
@@ -120,7 +135,7 @@ namespace CCounter
             return false;
         }
 
-        public static int RemoveAllRounds()
+        public int RemoveAllRounds()
         {
             List<string> listFiles = ListJSONFiles(true);
 

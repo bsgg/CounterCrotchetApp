@@ -91,6 +91,28 @@ namespace CCounter
                 lTitle.Add(title);
             }
             m_RoundListScroll.InitScroll(lTitle);
+
+            for (int i=0; i< m_RoundListScroll.Num(); i++)
+            {
+                GameObject go = m_RoundListScroll.Get(i);
+
+                if (go != null)
+                {
+                    CheckedMenuButton chk = go.GetComponent<CheckedMenuButton>();
+                    if (chk != null)
+                    {
+                        Round r = AppController.Instance.Patterns[m_SelectedPattern].Rounds[i];
+                        if (r.IsCompleted)
+                        {
+                            chk.Check();
+                        }else
+                        {
+                            chk.UnCheck();
+                        }                        
+                    }                
+                }
+            }
+
             m_RoundListScroll.OnButtonPress += OnRoundPress;
         }
 
@@ -99,7 +121,10 @@ namespace CCounter
             m_RoundListScroll.OnButtonPress -= OnRoundPress;
             m_SelectedRound = id;
 
-            AppController.Instance.ShowRoundCounter(m_SelectedPattern, m_SelectedRound);
+            AppController.Instance.SelectRoundInPattern(m_SelectedPattern, m_SelectedRound);
+
+            // Selects menu
+            AppController.Instance.SelectMenu(AppController.ETYPEMENU.ROUNDCOUNTER);
         }        
         
     }

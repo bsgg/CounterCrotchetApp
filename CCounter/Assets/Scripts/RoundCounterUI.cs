@@ -15,13 +15,13 @@ namespace CCounter
         private Toggle m_RoundCompletedToggle;
 
         private int m_CurrentCounter = 0;
-        private Round m_SelectedRound;
-        public Round SelectedRound
+
+
+        //private Round m_SelectedRound;
+        /*public Round SelectedRound
         {
             set { m_SelectedRound = value; }
-        }
-
-
+        }*/
 
         public override void Hide()
         {            
@@ -41,30 +41,29 @@ namespace CCounter
         {
             m_CurrentCounter = 0;
 
-            if (m_SelectedRound != null)
-            {               
+            if (AppController.Instance.CurrentRound != null)
+            {
+                m_RoundDescription.text = "R" + AppController.Instance.CurrentRound.RoundNumber.ToString() + ":";
 
-                m_RoundDescription.text = "R" + m_SelectedRound.RoundNumber.ToString() + ":";
-
-                if (m_SelectedRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
+                if (AppController.Instance.CurrentRound.TypeRound == Round.ETYPEROUND.FRONTLOOPY)
                 {
-                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " (FLO): ";
+                    m_RoundDescription.text = "Round " + AppController.Instance.CurrentRound.RoundNumber.ToString() + " (FLO): ";
                 }
-                else if (m_SelectedRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
+                else if (AppController.Instance.CurrentRound.TypeRound == Round.ETYPEROUND.BACKLOOP)
                 {
-                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " (BLO): ";
+                    m_RoundDescription.text = "Round " + AppController.Instance.CurrentRound.RoundNumber.ToString() + " (BLO): ";
                 }else
                 {
-                    m_RoundDescription.text = "Round " + m_SelectedRound.RoundNumber.ToString() + " : ";
+                    m_RoundDescription.text = "Round " + AppController.Instance.CurrentRound.RoundNumber.ToString() + " : ";
                 }
 
-                if (m_SelectedRound.Stiches != null)
+                if (AppController.Instance.CurrentRound.Stiches != null)
                 {
                     string stiches = "";
-                    for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
+                    for (int iStich = 0; iStich < AppController.Instance.CurrentRound.Stiches.Count; iStich++)
                     {
-                        stiches += m_SelectedRound.Stiches[iStich].NumberRepeats + m_SelectedRound.Stiches[iStich].Name;
-                        if (iStich < (m_SelectedRound.Stiches[iStich].NumberRepeats - 1))
+                        stiches += AppController.Instance.CurrentRound.Stiches[iStich].NumberRepeats + AppController.Instance.CurrentRound.Stiches[iStich].Name;
+                        if (iStich < (AppController.Instance.CurrentRound.Stiches[iStich].NumberRepeats - 1))
                         {
                             stiches += " , ";
                         }
@@ -75,11 +74,11 @@ namespace CCounter
 
                     // Add all stiches
                     List<string> listStiches = new List<string>();
-                    for (int iRepeat = 0; iRepeat < m_SelectedRound.Repeats; iRepeat++)
+                    for (int iRepeat = 0; iRepeat < AppController.Instance.CurrentRound.Repeats; iRepeat++)
                     {
-                        for (int iStich = 0; iStich < m_SelectedRound.Stiches.Count; iStich++)
+                        for (int iStich = 0; iStich < AppController.Instance.CurrentRound.Stiches.Count; iStich++)
                         {
-                            string st = m_SelectedRound.Stiches[iStich].NumberRepeats + "  " + m_SelectedRound.Stiches[iStich].Name.ToUpper();
+                            string st = AppController.Instance.CurrentRound.Stiches[iStich].NumberRepeats + "  " + AppController.Instance.CurrentRound.Stiches[iStich].Name.ToUpper();
                             listStiches.Add(st);
                         }
                     }
@@ -95,7 +94,7 @@ namespace CCounter
         {
             if ((m_CounterRoundListScroll != null))
             {
-                GameObject stichObj = m_CounterRoundListScroll.GetElement(id);
+                GameObject stichObj = m_CounterRoundListScroll.Get(id);
                 if (stichObj != null)
                 {
                     CheckedMenuButton chk = stichObj.GetComponent<CheckedMenuButton>();
@@ -107,7 +106,7 @@ namespace CCounter
             }
         }
 
-        void Update()
+        /*void Update()
         {
             if (m_SelectedRound != null)
             {
@@ -120,23 +119,25 @@ namespace CCounter
                     }
                 }
             }
-        }
+        }*/
 
         public void OnNextRound()
         {
-            // Last  group, check round and get next one
-           /* AppController.Instance.FinishCurrentRoundInList(m_RoundCompletedToggle.isOn);
-
-            Round round = AppController.Instance.GetNextRoundInList();
-
-            if (round != null)
+            if (AppController.Instance.MarkRound(m_RoundCompletedToggle.isOn))
             {
-                SetRound(round);
+                SetRound();
             }
             else
             {
-                Debug.Log("[ROUNDCOUNTERUI] NO MORE ROUNDS");
-            }*/
+                AppController.Instance.MessagePopup.ShowPopup("No more rounds", "There aren't any more rounds for this part.",
+                    "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
+            }
+            
+        }
+
+        private void OnOkPopupBtnPress()
+        {
+            AppController.Instance.MessagePopup.Hide();
         }
 
     }

@@ -41,7 +41,7 @@ namespace CCounter
         private UIBase m_MainMenuUI;
 
         [SerializeField]
-        private PartPatternSettings m_PartPatternSettings;
+        private DesignSettings m_PartPatternSettings;
 
         [SerializeField]
         private RoundSelectorUI m_RoundSelectorUI;
@@ -289,7 +289,7 @@ namespace CCounter
 
         public void OnAcceptNewDesign()
         {
-            m_PartPattern.CreateNewRound(m_PartPatternSettings.PartName, m_PartPatternSettings.PartStartIndex);
+            m_PartPattern.CreateNewRound(m_PartPatternSettings.Name, m_PartPatternSettings.RoundStartIndex);
             SelectMenu(ETYPEMENU.PARTPATTERN);
         }
         #endregion NewDesign

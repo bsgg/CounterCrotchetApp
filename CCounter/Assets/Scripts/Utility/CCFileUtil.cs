@@ -18,7 +18,6 @@ namespace CCounter
     {
         public string FileName;
         public string URL;
-        public string Data;
     }
 
     [Serializable]
@@ -37,6 +36,7 @@ namespace CCounter
 
 
         [SerializeField] private string m_PatternFolder = "Patterns";
+        [SerializeField] private string m_IndexFileName = "Index.json";
         [SerializeField] private string m_URLServer = "Patterns";
 
         private string m_LocalPath;
@@ -56,8 +56,18 @@ namespace CCounter
             }
         }
 
+        private List<Pattern> m_PatternList;
+        public List<Pattern> PatternList
+        {
+            get
+            {
+                return m_PatternList;
+            }
+        }
+
         public void Init()
         {
+            m_FileData = new FileData();
             m_LocalPath = Path.Combine(Application.dataPath, m_PatternFolder);
 
             if (!Directory.Exists(m_LocalPath))
@@ -73,15 +83,17 @@ namespace CCounter
             // Convert to JSON
             string json = JsonUtility.ToJson(round);
             byte[] data = Encoding.UTF8.GetBytes(json);
+            
 
-           
             string fileName = round.RoundNumber.ToString();
             if (round.RoundNumber < 10)
             {
                 fileName = "0" + round.RoundNumber.ToString();
             }
-            fileName += "_" + round.PartName + ".json";
-            m_FilePath = Path.Combine(m_LocalPath, fileName);
+
+            fileName += "_" + round.PartName;
+            string fileNameExt = fileName + ".json";
+            m_FilePath = Path.Combine(m_LocalPath, fileNameExt);
 
             try
             {
@@ -107,51 +119,148 @@ namespace CCounter
             return false;
         }
 
+        public void CreateFileIndex()
+        {
+            // Get name files
+            if (Directory.Exists(m_LocalPath))
+            {
+                FileData data = new FileData();
+
+                string[] auxFiles = Directory.GetFiles(m_LocalPath, "*.json");
+                if (auxFiles != null)
+                {
+                    for (int i = 0; i < auxFiles.Length; i++)
+                    {
+                        string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
+                        filename.Trim();
+                        string fileNameExt = Path.GetFileName(auxFiles[i]);
+                        fileNameExt.Trim();
+
+                        if (fileNameExt != m_IndexFileName)
+                        {
+                            IndexFile index = new IndexFile();
+                            index.FileName = filename;
+                            index.URL = fileNameExt;
+                            data.Data.Add(index);
+                        }
+                    }
+                }
+
+                if ((data != null) && (data.Data != null) && (data.Data.Count  > 0))
+                {
+                    string json = JsonUtility.ToJson(data);
+                    string path = Path.Combine(m_LocalPath, m_IndexFileName);
+
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+
+                    using (FileStream fs = File.Create(path))
+                    {
+                        byte[] info = new UTF8Encoding(true).GetBytes(json);
+                        fs.Write(info, 0, info.Length);
+                        fs.Close();
+                    }
+
+                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] File index created: "+ path + "</color>");
+                }
+                else
+                {
+                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] No data to create file "  + "</color>");
+                }
+            }
+        }
 
         public IEnumerator Load()
         {
-
+            m_PatternList = new List<Pattern>();
             m_FileData = new FileData();
 
-            string urlFile = Path.Combine(m_URLServer, "Index.json");
+            string urlFile = Path.Combine(m_URLServer, m_IndexFileName);
 
             WWW wwwFile = new WWW(urlFile);
             yield return wwwFile;
             string jsonData = wwwFile.text;
             if (!string.IsNullOrEmpty(jsonData))
             {
-                Debug.Log("<color=purple>" + "[CCFileUtil] Requesting... " + jsonData + " Files " + "</color>");
 
                 m_FileData = JsonUtility.FromJson<FileData>(jsonData);
 
                 Debug.Log("<color=purple>" + "[CCFileUtil] Requesting... " + m_FileData.Data.Count + " Files " + "</color>");
                 for (int i = 0; i < m_FileData.Data.Count; i++)
                 {
+
                     if (string.IsNullOrEmpty(m_FileData.Data[i].URL))
                     {
                         continue;
                     }
 
-                    // Request
-                    Debug.Log("<color=blue>" + "[CCFileUtil] Requesting: " + (i + 1) + "/" + m_FileData.Data.Count + " : " + m_FileData.Data[i].FileName + "</color>");
-                    WWW www = new WWW(m_FileData.Data[i].URL);
+                    // Request 
+                    urlFile = Path.Combine(m_URLServer, m_FileData.Data[i].URL);
+
+                    Debug.Log("<color=purple>" + "[CCFileUtil] Requesting: " + (i + 1) + "/" + m_FileData.Data.Count + " : " + urlFile + "</color>");
+
+                    WWW www = new WWW(urlFile);
+
                     yield return www;
 
-                    m_FileData.Data[i].Data = www.text;
+                    string data = www.text;
+
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        try
+                        {
+                            Round round = JsonUtility.FromJson<Round>(data);
+
+                            string[] splitted = m_FileData.Data[i].FileName.Split('_');
+
+                            if (splitted != null && splitted.Length > 1)
+                            {
+                                string designName = splitted[1].Trim();
+
+                                // Check if this design exist or new design
+                                bool found = false;
+                                int indexP = 0;
+                                for (indexP = 0; (indexP < m_PatternList.Count) && (!found); indexP++)
+                                {
+                                    if (m_PatternList[indexP].Name.ToLower() == designName.ToLower())
+                                    {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (found)
+                                {
+                                    m_PatternList[indexP].Rounds.Add(round);
+                                }
+                                else
+                                {
+
+                                    m_PatternList.Add(new Pattern(designName, round));
+                                }
+
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                            Debug.Log("<color=purple>" + "[CCFileUtil] Unable to parse data" + "</color>");
+                        }
+                    }else
+                    {
+                        Debug.Log("<color=purple>" + "[CCFileUtil] Data is empty" + "</color>");
+                    }
                 }
-
-            }
-
-                yield return new WaitForEndOfFrame();
-            /* WWW wwwFile = new WWW(m_URLServer);
-
-             yield return wwwFile;
-
-             string jsonData = wwwFile.text;
-
-
-             yield return new WaitForEndOfFrame();*/
+            }             
         }
+
+
+
+
+
+
+
 
 
 

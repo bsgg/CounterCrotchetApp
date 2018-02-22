@@ -51,6 +51,9 @@ namespace CCounter
         private void Start()
         {
             m_FileHandler.Init();
+
+            m_FileHandler.CreateFileIndex();
+
             m_MessagePopup.Hide();
             m_DesignControl.Show();
         }

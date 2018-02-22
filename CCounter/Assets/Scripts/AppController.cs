@@ -84,10 +84,10 @@ namespace CCounter
 
 
         private void Start()
-        {
-            m_FileHandler.Init();
+        {          
 
-            StartCoroutine(m_FileHandler.Load());
+            StartCoroutine(Init());
+
 
             //LoadPatterns();
             /*m_RoundCounterUI.Init();
@@ -95,7 +95,38 @@ namespace CCounter
             SelectMenu(ETYPEMENU.MAINMENU);     */       
         }
 
-    private void LoadPatterns()
+        private IEnumerator Init()
+        {
+            m_RoundSelectorUI.Hide();
+            m_MessagePopup.Hide();
+            m_RoundCounterUI.Hide();
+
+            m_FileHandler.Init();
+            yield return m_FileHandler.Load();
+
+            m_Patterns = m_FileHandler.PatternList;
+
+            m_RoundSelectorUI.Show();
+        }
+
+        public void SelectRound(int patternID, int roundID)
+        {
+            m_CurrentRound = new Round();
+
+            if ((m_Patterns == null) || (patternID < 0) || (patternID >= m_Patterns.Count)) return;
+            if ((m_Patterns[patternID].Rounds == null) || (roundID < 0) || (roundID >= m_Patterns[patternID].Rounds.Count)) return;
+
+            m_SelectedPatternID = patternID;
+            m_SelectedRoundID = roundID;
+            m_CurrentRound = m_Patterns[m_SelectedPatternID].Rounds[m_SelectedRoundID];
+
+            m_RoundSelectorUI.Hide();
+            m_RoundCounterUI.Show();
+        }
+
+
+
+       /* private void LoadPatterns()
         {
             m_Patterns = new List<Pattern>();
 
@@ -154,7 +185,7 @@ namespace CCounter
 
             Debug.Log("[AppController.LoadPatterns] m_Patterns count " + m_Patterns.Count);
 
-        }
+        }*/
 
         /**/
 

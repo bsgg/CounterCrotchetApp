@@ -37,8 +37,8 @@ namespace CCounter
             get { return m_TopBar; }
         }
 
-        [SerializeField]
-        private UIBase m_MainMenuUI;
+        /*[SerializeField]
+        private UIBase m_MainMenuUI;*/
 
         /*[SerializeField]
         private DesignSettings m_PartPatternSettings;*/
@@ -58,6 +58,13 @@ namespace CCounter
         public MessagePopup MessagePopup
         {
             get { return m_MessagePopup; }
+        }
+
+        [SerializeField]
+        private LauncherUI m_Launcher;
+        public LauncherUI Launcher
+        {
+            get { return m_Launcher; }
         }
 
         [SerializeField]
@@ -101,9 +108,19 @@ namespace CCounter
             m_MessagePopup.Hide();
             m_RoundCounterUI.Hide();
 
+            m_Launcher.Show();
+
             m_FileHandler.Init();
+
             yield return m_FileHandler.Load();
 
+            m_Launcher.OKButton.interactable = true;
+            
+        }
+
+        public void OnOkLauncher()
+        {
+            m_Launcher.Hide();
             m_Patterns = m_FileHandler.PatternList;
 
             m_RoundSelectorUI.Show();

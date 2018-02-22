@@ -17,7 +17,7 @@ namespace CCounter
     public class IndexFile
     {
         public string FileName;
-        public string URL;
+        //public string URL;
     }
 
     [Serializable]
@@ -38,6 +38,8 @@ namespace CCounter
         [SerializeField] private string m_PatternFolder = "Patterns";
         [SerializeField] private string m_IndexFileName = "Index.json";
         [SerializeField] private string m_URLServer = "Patterns";
+
+        [SerializeField] private string m_LocalRootPath = "D:/Downloads/CCrotchet";
 
         private string m_LocalPath;
         private string m_FilePath;
@@ -68,14 +70,14 @@ namespace CCounter
         public void Init()
         {
             m_FileData = new FileData();
-            m_LocalPath = Path.Combine(Application.dataPath, m_PatternFolder);
+            //m_LocalPath = Path.Combine(Application.dataPath, m_PatternFolder);
 
-            if (!Directory.Exists(m_LocalPath))
+            if (!Directory.Exists(m_LocalRootPath))
             {
-                Directory.CreateDirectory(m_LocalPath);
+                Directory.CreateDirectory(m_LocalRootPath);
             }
 
-            Debug.Log("<color=purple>" + "[CCFileUtil.Init] Local Path: " + m_LocalPath + "</color>");
+            Debug.Log("<color=purple>" + "[CCFileUtil.Init] Local Path: " + m_LocalRootPath + "</color>");
         }
         
         public bool Save(Round round)
@@ -93,7 +95,7 @@ namespace CCounter
 
             fileName += "_" + round.PartName;
             string fileNameExt = fileName + ".json";
-            m_FilePath = Path.Combine(m_LocalPath, fileNameExt);
+            m_FilePath = Path.Combine(m_LocalRootPath, fileNameExt);
 
             try
             {
@@ -122,11 +124,11 @@ namespace CCounter
         public void CreateFileIndex()
         {
             // Get name files
-            if (Directory.Exists(m_LocalPath))
+            if (Directory.Exists(m_LocalRootPath))
             {
                 FileData data = new FileData();
 
-                string[] auxFiles = Directory.GetFiles(m_LocalPath, "*.json");
+                string[] auxFiles = Directory.GetFiles(m_LocalRootPath, "*.json");
                 if (auxFiles != null)
                 {
                     for (int i = 0; i < auxFiles.Length; i++)
@@ -140,7 +142,7 @@ namespace CCounter
                         {
                             IndexFile index = new IndexFile();
                             index.FileName = filename;
-                            index.URL = fileNameExt;
+                            //index.URL = fileNameExt;
                             data.Data.Add(index);
                         }
                     }
@@ -149,7 +151,7 @@ namespace CCounter
                 if ((data != null) && (data.Data != null) && (data.Data.Count  > 0))
                 {
                     string json = JsonUtility.ToJson(data);
-                    string path = Path.Combine(m_LocalPath, m_IndexFileName);
+                    string path = Path.Combine(m_LocalRootPath, m_IndexFileName);
 
                     if (File.Exists(path))
                     {
@@ -179,27 +181,38 @@ namespace CCounter
 
             string urlFile = Path.Combine(m_URLServer, m_IndexFileName);
 
+            AppController.Instance.Launcher.Description = "\n - Retrieving files from " + urlFile;
+
             WWW wwwFile = new WWW(urlFile);
+
+
             yield return wwwFile;
             string jsonData = wwwFile.text;
             if (!string.IsNullOrEmpty(jsonData))
             {
-
                 m_FileData = JsonUtility.FromJson<FileData>(jsonData);
 
                 Debug.Log("<color=purple>" + "[CCFileUtil] Requesting... " + m_FileData.Data.Count + " Files " + "</color>");
+
+                AppController.Instance.Launcher.Description += "\n - Requesting " + m_FileData.Data.Count + " Files ";
+
                 for (int i = 0; i < m_FileData.Data.Count; i++)
                 {
 
-                    if (string.IsNullOrEmpty(m_FileData.Data[i].URL))
+                    if (string.IsNullOrEmpty(m_FileData.Data[i].FileName))
                     {
                         continue;
                     }
 
                     // Request 
-                    urlFile = Path.Combine(m_URLServer, m_FileData.Data[i].URL);
+                    string fileNameExt = m_FileData.Data[i].FileName + ".json";
+                    urlFile = Path.Combine(m_URLServer, fileNameExt);
 
                     Debug.Log("<color=purple>" + "[CCFileUtil] Requesting: " + (i + 1) + "/" + m_FileData.Data.Count + " : " + urlFile + "</color>");
+
+
+                    AppController.Instance.Launcher.Description += "\n - Requesting " + (i + 1) + " / " + m_FileData.Data.Count + " : " + urlFile;
+
 
                     WWW www = new WWW(urlFile);
 
@@ -246,14 +259,22 @@ namespace CCounter
                         catch(Exception e)
                         {
                             Debug.Log("<color=purple>" + "[CCFileUtil] Unable to parse data" + "</color>");
+
+                            AppController.Instance.Launcher.Description += "\n - Unable to parse data: " + urlFile;
                         }
                     }else
                     {
                         Debug.Log("<color=purple>" + "[CCFileUtil] Data is empty" + "</color>");
                     }
                 }
+
+                AppController.Instance.Launcher.Description += "\n - Completed: " + urlFile;
             }             
         }
+
+
+
+
 
 
 

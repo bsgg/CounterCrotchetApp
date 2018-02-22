@@ -181,7 +181,7 @@ namespace CCounter
 
             string urlFile = Path.Combine(m_URLServer, m_IndexFileName);
 
-            AppController.Instance.Launcher.Description = "\n - Retrieving files from " + urlFile;
+            AppController.Instance.Launcher.Description += "\n - Retrieving files from " + urlFile;
 
             WWW wwwFile = new WWW(urlFile);
 

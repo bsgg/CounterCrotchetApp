@@ -110,7 +110,9 @@ namespace CCounter
 
             m_Launcher.Show();
 
-            m_FileHandler.Init();
+            m_Launcher.Description = "Launcher";
+
+            //m_FileHandler.Init();
 
             yield return m_FileHandler.Load();
 

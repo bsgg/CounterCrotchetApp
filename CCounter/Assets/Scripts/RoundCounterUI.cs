@@ -123,7 +123,7 @@ namespace CCounter
 
         public void OnNextRound()
         {
-           /* if (AppController.Instance.MarkRound(m_RoundCompletedToggle.isOn))
+            if (AppController.Instance.MarkRound(m_RoundCompletedToggle.isOn))
             {
                 SetRound();
             }
@@ -131,7 +131,7 @@ namespace CCounter
             {
                 AppController.Instance.MessagePopup.ShowPopup("No more rounds", "There aren't any more rounds for this part.",
                     "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
-            }*/
+            }
             
         }
 

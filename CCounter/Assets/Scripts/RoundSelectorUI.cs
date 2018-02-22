@@ -121,10 +121,10 @@ namespace CCounter
             m_RoundListScroll.OnButtonPress -= OnRoundPress;
             m_SelectedRound = id;
 
-            AppController.Instance.SelectRoundInPattern(m_SelectedPattern, m_SelectedRound);
+           // AppController.Instance.SelectRoundInPattern(m_SelectedPattern, m_SelectedRound);
 
             // Selects menu
-            AppController.Instance.SelectMenu(AppController.ETYPEMENU.ROUNDCOUNTER);
+            //AppController.Instance.SelectMenu(AppController.ETYPEMENU.ROUNDCOUNTER);
         }        
         
     }

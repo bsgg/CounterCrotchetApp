@@ -40,8 +40,8 @@ namespace CCounter
         [SerializeField]
         private UIBase m_MainMenuUI;
 
-        [SerializeField]
-        private DesignSettings m_PartPatternSettings;
+        /*[SerializeField]
+        private DesignSettings m_PartPatternSettings;*/
 
         [SerializeField]
         private RoundSelectorUI m_RoundSelectorUI;
@@ -49,8 +49,9 @@ namespace CCounter
         [SerializeField]
         private RoundCounterUI m_RoundCounterUI;        
 
-        [SerializeField]
+        /*[SerializeField]
         private PartPattern m_PartPattern;
+        */
 
         [SerializeField]
         private MessagePopup m_MessagePopup;
@@ -66,25 +67,40 @@ namespace CCounter
             get { return m_Patterns; }
         }
 
-        [SerializeField] private CCFileUtil m_CCFile;
+        [SerializeField] private CCFileUtil m_FileHandler;
+        public CCFileUtil FileHandler
+        {
+            get { return m_FileHandler; }
+        }
+
+        private int m_SelectedPatternID;
+        private int m_SelectedRoundID;
+        private Round m_CurrentRound;
+
+        public Round CurrentRound
+        {
+            get { return m_CurrentRound; }
+        }
 
 
         private void Start()
         {
-            m_CCFile.Init();
+            m_FileHandler.Init();
 
-            LoadPatterns();
-            m_RoundCounterUI.Init();
+            StartCoroutine(m_FileHandler.Load());
+
+            //LoadPatterns();
+            /*m_RoundCounterUI.Init();
             //m_CurrentRoundIDSelected = 0;
-            SelectMenu(ETYPEMENU.MAINMENU);            
+            SelectMenu(ETYPEMENU.MAINMENU);     */       
         }
 
-        private void LoadPatterns()
+    private void LoadPatterns()
         {
             m_Patterns = new List<Pattern>();
 
             // Get current list of rounds
-            List<string> listFiles = m_CCFile.ListJSONFiles(false);
+            List<string> listFiles = m_FileHandler.ListJSONFiles(false);
 
             DebugManager.Instance.Log("FilesFound(" + listFiles.Count + ")\n");
             
@@ -93,7 +109,7 @@ namespace CCounter
             {
                 Round round = new Round();
 
-                bool roundLoaded = m_CCFile.LoadRoundJSON(listFiles[i], out round);
+                bool roundLoaded = m_FileHandler.LoadRoundJSON(listFiles[i], out round);
 
                 if (roundLoaded)
                 {
@@ -212,14 +228,14 @@ namespace CCounter
         }*/
 
         
-        public void SelectMenu(ETYPEMENU menu)
+        /*public void SelectMenu(ETYPEMENU menu)
         {            
             m_CurrentMenu = menu;
 
             // Hide all
             m_RoundCounterUI.Hide();
             m_RoundSelectorUI.Hide();
-            m_PartPattern.Hide();
+
             m_MainMenuUI.Hide();
             m_MessagePopup.Hide();
             m_PartPatternSettings.Hide();
@@ -253,9 +269,9 @@ namespace CCounter
                     m_RoundSelectorUI.Show();
                 break;                
             }
-        }
+        }*/
 
-        public void OnBack()
+       /* public void OnBack()
         {
             // Hide all
             m_RoundCounterUI.Hide();
@@ -279,10 +295,10 @@ namespace CCounter
                 break;
                 
             }
-        }
+        }*/
 
-        #region NewDesign
-        public void OnAddNewDesign()
+        //#region NewDesign
+       /* public void OnAddNewDesign()
         {
             SelectMenu(ETYPEMENU.PATTERNSETTINGS);
         }
@@ -319,7 +335,7 @@ namespace CCounter
                // m_MainMenuUI.ShowConfirm(nfiles + " have been removed ");
             }
 
-        }
+        }*/
 
         /*public void OnShowRoundCounter(int idRound)
         {
@@ -353,18 +369,18 @@ namespace CCounter
         }*/
 
 
-        private int m_SelectedPatternID;
+        /*private int m_SelectedPatternID;
         private int m_SelectedRoundID;
-        private Round m_CurrentRound;
+        private Round m_CurrentRound;*/
 
-        public Round CurrentRound
+        /*public Round CurrentRound
         {
             get { return m_CurrentRound; }
-        }
+        }*/
 
 
 
-        public void SelectRoundInPattern(int idPattern, int idRound)
+       /* public void SelectRoundInPattern(int idPattern, int idRound)
         {
             m_CurrentRound = new Round();
 
@@ -376,9 +392,9 @@ namespace CCounter
             m_CurrentRound = m_Patterns[idPattern].Rounds[idRound];
 
            // m_RoundCounterUI.SelectedRound = m_CurrentRound;            
-        }
+        }*/
 
-        public bool MarkRound(bool completed)
+        /*public bool MarkRound(bool completed)
         {           
             if (m_CurrentRound != null)
             {
@@ -397,12 +413,25 @@ namespace CCounter
             }
 
             return false;
-        }
+        }*/
 
-        public int SaveRound(Round round)
+       /* public int SaveRound(Round round)
         {
             m_CCFile.SaveRoundToJSON(round);         
             return 0;
         }
+        */
+
+
+        #region Menu
+
+        public void OnMenuPress()
+        {
+
+        }
+
+
+        #endregion Menu
+
     }
 }

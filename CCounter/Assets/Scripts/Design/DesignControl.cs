@@ -107,7 +107,6 @@ namespace CCounter
                 m_CurrentRound.Repeats = m_Round.RoundRepeat;
                 m_CurrentRound.StichCount = 0;
                 m_CurrentRound.Stiches = new List<Stich>();
-                m_CurrentRound.AllRepeatsStiches = new List<Stich>();
 
                 for (int i = 0; i < m_ListStiches.Count; i++)
                 {
@@ -120,8 +119,6 @@ namespace CCounter
                     for (int iStich = 0; iStich < m_ListStiches.Count; iStich++)
                     {
                         Stich stich = m_ListStiches[iStich];
-
-                        m_CurrentRound.AllRepeatsStiches.Add(stich);
                         m_CurrentRound.StichCount += stich.NumberRepeats;
 
                         // Find incremental 
@@ -137,7 +134,7 @@ namespace CCounter
                 // Save current round in JSON and create new round 
 
                 //ToolController.Instance.Fi.SaveRoundToJSON(m_CurrentRound);
-                StartCoroutine(Save());  
+                Save();  
             }
             else
             {
@@ -148,17 +145,29 @@ namespace CCounter
             }
         }
 
-        private IEnumerator Save()
+        private void Save()
         {
             string message = "Saving.. Round " + m_RoundNumber + " - " + m_CurrentRound.StichCount + " stich(es)";
             ToolController.Instance.MessagePopup.ShowPopup("Saving", message,
                  string.Empty, null, string.Empty, null, string.Empty, null);
 
-            yield return ToolController.Instance.FileHandler.SaveAndUpload(m_CurrentRound);
-
-            message = "Round " + m_RoundNumber + " - " + m_CurrentRound.StichCount + " stich(es)";
-            ToolController.Instance.MessagePopup.ShowPopup("New round added", message,
+            bool success = ToolController.Instance.FileHandler.Save(m_CurrentRound);
+            string path = ToolController.Instance.FileHandler.FilePath;
+            message = string.Empty;
+            if (success)
+            {
+                
+                message = "Round " + m_RoundNumber + " - " + m_CurrentRound.StichCount + " stich(es) Saved at: " + path;
+                ToolController.Instance.MessagePopup.ShowPopup("New round added", message,
                 "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
+
+            }
+            else
+            {
+                message = "There was a problem with round " + m_RoundNumber  + " Path: " + path;
+                ToolController.Instance.MessagePopup.ShowPopup("New round added", message,
+                "Ok", OnOkPopupBtnPress, string.Empty, null, string.Empty, null);
+            }
 
             // Reset all 
             string partName = m_CurrentRound.PartName;

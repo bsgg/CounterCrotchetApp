@@ -114,7 +114,6 @@ namespace CCounter
                 m_CurrentRound.StichCount = 0;
 
                 m_CurrentRound.Stiches = new List<Stich>();
-                m_CurrentRound.AllRepeatsStiches = new List<Stich>();
 
                 for (int i = 0; i < m_ListStiches.Count; i++)
                 {
@@ -127,8 +126,6 @@ namespace CCounter
                     for (int iStich = 0; iStich < m_ListStiches.Count; iStich++)
                     {
                         Stich stich = m_ListStiches[iStich];
-
-                        m_CurrentRound.AllRepeatsStiches.Add(stich);
                         m_CurrentRound.StichCount += stich.NumberRepeats;
 
                         // Find incremental 
@@ -142,7 +139,7 @@ namespace CCounter
                 }
 
                 // Save current round in JSON and create new round 
-                int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
+                //int numberRounds = AppController.Instance.SaveRound(m_CurrentRound);
 
                 string message = "Round " + m_RoundNumber + " - " + m_CurrentRound.StichCount + " stich(es)";
                 AppController.Instance.MessagePopup.ShowPopup("New round added", message,

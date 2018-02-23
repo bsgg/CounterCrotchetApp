@@ -48,25 +48,34 @@ namespace CCounter
             get { return m_TopBar; }
         }
 
+        [SerializeField]
+        private MenuTool m_MenuTool;
+        public MenuTool MenuTool
+        {
+            get { return m_MenuTool; }
+        }
+        
+
         private void Start()
         {
-            m_FileHandler.Init();
-
-            m_FileHandler.CreateFileIndex();
-
+            //m_FileHandler.CreateFileIndex();
+            m_MenuTool.Hide();
             m_MessagePopup.Hide();
-            m_DesignControl.Show();
+            //m_DesignControl.Show();
         }
 
         #region MainMenu
+
+        public void OnMenuPress()
+        {
+            m_MenuTool.Show();
+        }
 
         public void OnNewDesignPress()
         {
             m_MessagePopup.Hide();
             m_DesignControl.Show();
         }
-
-        
 
         #endregion MainMenu
 

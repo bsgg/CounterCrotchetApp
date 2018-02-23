@@ -40,6 +40,10 @@ namespace CCounter
         [SerializeField] private string m_URLServer = "Patterns";
 
         [SerializeField] private string m_LocalRootPath = "D:/Downloads/CCrotchet";
+        public string LocalRootPath
+        {
+            get { return m_LocalRootPath; }
+        }
 
         private string m_LocalPath;
         private string m_FilePath;
@@ -67,21 +71,19 @@ namespace CCounter
             }
         }
 
-        public void Init()
+        private void Start()
         {
+            m_PatternList = new List<Pattern>();
             m_FileData = new FileData();
-            //m_LocalPath = Path.Combine(Application.dataPath, m_PatternFolder);
+        }
 
+        public bool Save(Round round)
+        {
             if (!Directory.Exists(m_LocalRootPath))
             {
                 Directory.CreateDirectory(m_LocalRootPath);
             }
 
-            Debug.Log("<color=purple>" + "[CCFileUtil.Init] Local Path: " + m_LocalRootPath + "</color>");
-        }
-        
-        public bool Save(Round round)
-        {
             // Convert to JSON
             string json = JsonUtility.ToJson(round);
             byte[] data = Encoding.UTF8.GetBytes(json);
@@ -121,14 +123,14 @@ namespace CCounter
             return false;
         }
 
-        public void CreateFileIndex()
+        public bool CreateFileIndex(string path, out string message)
         {
+            message = string.Empty;
             // Get name files
-            if (Directory.Exists(m_LocalRootPath))
+            if (Directory.Exists(path))
             {
                 FileData data = new FileData();
-
-                string[] auxFiles = Directory.GetFiles(m_LocalRootPath, "*.json");
+                string[] auxFiles = Directory.GetFiles(path, "*.json");
                 if (auxFiles != null)
                 {
                     for (int i = 0; i < auxFiles.Length; i++)
@@ -151,11 +153,11 @@ namespace CCounter
                 if ((data != null) && (data.Data != null) && (data.Data.Count  > 0))
                 {
                     string json = JsonUtility.ToJson(data);
-                    string path = Path.Combine(m_LocalRootPath, m_IndexFileName);
+                    string pathFile = Path.Combine(m_LocalRootPath, m_IndexFileName);
 
-                    if (File.Exists(path))
+                    if (File.Exists(pathFile))
                     {
-                        File.Delete(path);
+                        File.Delete(pathFile);
                     }
 
                     using (FileStream fs = File.Create(path))
@@ -165,19 +167,27 @@ namespace CCounter
                         fs.Close();
                     }
 
-                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] File index created: "+ path + "</color>");
+                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] File index created: " + path + "</color>");
+                    message = data.Data.Count + "Files created";
+
+                    return true;
+                    
                 }
                 else
                 {
                     Debug.Log("<color=purple>" + "[CCFileUtil.Save] No data to create file "  + "</color>");
+                    message = "0 files created.";
+                    return true;
                 }
             }
+
+            message = "Directory " + path + " doesn't exist";
+            return false;
         }
 
         public IEnumerator Load()
         {
-            m_PatternList = new List<Pattern>();
-            m_FileData = new FileData();
+            
 
             string urlFile = Path.Combine(m_URLServer, m_IndexFileName);
 

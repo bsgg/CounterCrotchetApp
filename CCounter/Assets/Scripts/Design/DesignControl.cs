@@ -131,9 +131,7 @@ namespace CCounter
                     }
                 }
 
-                // Save current round in JSON and create new round 
-
-                //ToolController.Instance.Fi.SaveRoundToJSON(m_CurrentRound);
+                // Save
                 Save();  
             }
             else

@@ -32,3 +32,5 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+CCounter/.vs/CCounter/v15/Server/sqlite3/db.lock
+CCounter/.vs/CCounter/v15/Server/sqlite3/storage.ide

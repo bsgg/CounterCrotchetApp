@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace CCounter
 {
-    public class RoundUI : UIBase
+    public class DesignRound : UIBase
     {
         [SerializeField] private Text m_CurrentRound;
         public string CurrentRound
@@ -24,8 +24,6 @@ namespace CCounter
 
         [SerializeField]
         private Toggle m_NoDuplicateStichToogle;
-
-        //private int m_StichSelected = 0;
 
 
         [Header("Round Settings")]

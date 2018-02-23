@@ -45,7 +45,6 @@ namespace CCounter
         public int Repeats;
         
         public List<Stich> Stiches;
-        public List<Stich> AllRepeatsStiches;
         public int StichCount;
         public bool IsCompleted = false;        
 
@@ -55,7 +54,6 @@ namespace CCounter
             TypeRound = ETYPEROUND.NORMAL;
             RoundNumber = 0;
             Stiches = new List<Stich>();
-            AllRepeatsStiches = new List<Stich>();
             StichCount = 0;
             IsCompleted = false;
         }

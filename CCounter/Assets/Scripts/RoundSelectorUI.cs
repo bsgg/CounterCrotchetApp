@@ -20,13 +20,12 @@ namespace CCounter
             // Load patterns 
             LoadPatternList();
             m_RoundListScroll.OnButtonPress += OnPatternPress;
-
         }
 
         private void LoadPatternList()
         {
             List<string> lPattern = new List<string>();
-            for (int i=0; i<  AppController.Instance.Patterns.Count; i++)
+            for (int i=0; i< AppController.Instance.Patterns.Count; i++)
             {
                 lPattern.Add(AppController.Instance.Patterns[i].Name);
 
@@ -39,8 +38,7 @@ namespace CCounter
             m_RoundListScroll.OnButtonPress -= OnPatternPress;
             m_SelectedPattern = id;
 
-            LoadRoundsList();
-            
+            LoadRoundsList();            
         }
 
         private void LoadRoundsList()
@@ -121,10 +119,10 @@ namespace CCounter
             m_RoundListScroll.OnButtonPress -= OnRoundPress;
             m_SelectedRound = id;
 
-            AppController.Instance.SelectRoundInPattern(m_SelectedPattern, m_SelectedRound);
+            AppController.Instance.SelectRound(m_SelectedPattern, m_SelectedRound);
 
             // Selects menu
-            AppController.Instance.SelectMenu(AppController.ETYPEMENU.ROUNDCOUNTER);
+            //AppController.Instance.SelectMenu(AppController.ETYPEMENU.ROUNDCOUNTER);
         }        
         
     }

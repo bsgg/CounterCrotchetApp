@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 namespace CCounter
 {
-    public class PartPatternSettings : UIBase
+    public class DesignSettings : UIBase
     {
         [SerializeField] private InputField m_PartNameInput;
         [SerializeField] private InputField m_PartStartIndexInput;
 
-        public int PartStartIndex
+        public int RoundStartIndex
         {
             get
             {
@@ -26,7 +26,7 @@ namespace CCounter
         }
 
 
-        public string PartName
+        public string Name
         {
             get
             {

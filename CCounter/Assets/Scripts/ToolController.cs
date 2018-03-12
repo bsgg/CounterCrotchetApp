@@ -54,13 +54,24 @@ namespace CCounter
         {
             get { return m_MenuTool; }
         }
-        
+
+        [SerializeField]
+        private MainToolUI m_Main;
+        public MainToolUI Main
+        {
+            get { return m_Main; }
+        }
+
 
         private void Start()
         {
             //m_FileHandler.CreateFileIndex();
             m_MenuTool.Hide();
             m_MessagePopup.Hide();
+            m_DesignControl.Hide();
+
+            m_Main.Show();
+
             //m_DesignControl.Show();
         }
 
@@ -73,6 +84,8 @@ namespace CCounter
 
         public void OnNewDesignPress()
         {
+            m_Main.Hide();
+            m_MenuTool.Hide();
             m_MessagePopup.Hide();
             m_DesignControl.Show();
         }

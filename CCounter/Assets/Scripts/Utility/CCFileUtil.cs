@@ -37,6 +37,10 @@ namespace CCounter
 
         [SerializeField] private string m_PatternFolder = "Patterns";
         [SerializeField] private string m_IndexFileName = "Index.json";
+        public string IndexFileName
+        {
+            get { return m_IndexFileName; }
+        }
         [SerializeField] private string m_URLServer = "Patterns";
 
         [SerializeField] private string m_LocalRootPath = "D:/Downloads/CCrotchet";
@@ -123,71 +127,79 @@ namespace CCounter
             return false;
         }
 
-        public bool CreateFileIndex(string path, out string message)
+        public bool CreateFileIndex(string path, string indexFileName, out string message)
         {
             message = string.Empty;
-            // Get name files
-            if (Directory.Exists(path))
-            {
-                FileData data = new FileData();
-                string[] auxFiles = Directory.GetFiles(path, "*.json");
-                if (auxFiles != null)
+            try
+            { 
+           
+                // Get name files
+                if (Directory.Exists(path))
                 {
-                    for (int i = 0; i < auxFiles.Length; i++)
+                    FileData data = new FileData();
+                    string[] auxFiles = Directory.GetFiles(path, "*.json");
+                    if (auxFiles != null)
                     {
-                        string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
-                        filename.Trim();
-                        string fileNameExt = Path.GetFileName(auxFiles[i]);
-                        fileNameExt.Trim();
-
-                        if (fileNameExt != m_IndexFileName)
+                        for (int i = 0; i < auxFiles.Length; i++)
                         {
-                            IndexFile index = new IndexFile();
-                            index.FileName = filename;
-                            //index.URL = fileNameExt;
-                            data.Data.Add(index);
+                            string filename = Path.GetFileNameWithoutExtension(auxFiles[i]);
+                            filename.Trim();
+                            string fileNameExt = Path.GetFileName(auxFiles[i]);
+                            fileNameExt.Trim();
+
+                            if (fileNameExt != indexFileName)
+                            {
+                                IndexFile index = new IndexFile();
+                                index.FileName = filename;
+                                //index.URL = fileNameExt;
+                                data.Data.Add(index);
+                            }
                         }
                     }
-                }
 
-                if ((data != null) && (data.Data != null) && (data.Data.Count  > 0))
-                {
-                    string json = JsonUtility.ToJson(data);
-                    string pathFile = Path.Combine(m_LocalRootPath, m_IndexFileName);
-
-                    if (File.Exists(pathFile))
+                    if ((data != null) && (data.Data != null) && (data.Data.Count  > 0))
                     {
-                        File.Delete(pathFile);
-                    }
+                        string json = JsonUtility.ToJson(data);
+                        string pathFile = Path.Combine(m_LocalRootPath, indexFileName);
 
-                    using (FileStream fs = File.Create(path))
-                    {
-                        byte[] info = new UTF8Encoding(true).GetBytes(json);
-                        fs.Write(info, 0, info.Length);
-                        fs.Close();
-                    }
+                        if (File.Exists(pathFile))
+                        {
+                            File.Delete(pathFile);
+                        }
 
-                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] File index created: " + path + "</color>");
-                    message = data.Data.Count + "Files created";
+                        using (FileStream fs = File.Create(pathFile))
+                        {
+                            byte[] info = new UTF8Encoding(true).GetBytes(json);
+                            fs.Write(info, 0, info.Length);
+                            fs.Close();
+                        }
 
-                    return true;
+                        Debug.Log("<color=purple>" + "[CCFileUtil.Save] File index created: " + pathFile + "</color>");
+                        message = " File number: " + data.Data.Count + " at: " + pathFile;
+
+                        return true;
                     
-                }
-                else
-                {
-                    Debug.Log("<color=purple>" + "[CCFileUtil.Save] No data to create file "  + "</color>");
-                    message = "0 files created.";
-                    return true;
-                }
+                    }
+                    else
+                    {
+                        Debug.Log("<color=purple>" + "[CCFileUtil.Save] No data to create file "  + "</color>");
+                        message = "0 files created.";
+                        return true;
+                    }
             }
 
-            message = "Directory " + path + " doesn't exist";
+                message = "Directory " + path + " doesn't exist";
+            }
+            catch (Exception e)
+            {
+                Debug.Log("<color=purple>" + "[CCFileUtil.Save] Unable to CreateFileIndex: " + e.ToString() + "</color>");
+                message = "Unable to CreateFileIndex " + e.ToString();
+            }
             return false;
         }
 
         public IEnumerator Load()
-        {
-            
+        {           
 
             string urlFile = Path.Combine(m_URLServer, m_IndexFileName);
 

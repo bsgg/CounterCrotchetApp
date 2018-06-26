@@ -32,6 +32,7 @@ namespace CCounter
 
     public class CCFileUtil: MonoBehaviour
     {
+        private string PATH_KEY = "CCROTCHET_FILE_PATH";
         public static string PATHJSONFILES = "/Resources/Patterns/";
 
 
@@ -79,6 +80,90 @@ namespace CCounter
         {
             m_PatternList = new List<Pattern>();
             m_FileData = new FileData();
+        }
+
+       
+
+        public void InitializeTool()
+        {
+            // Retrieve path
+            if (PlayerPrefs.HasKey(PATH_KEY))
+            {
+                m_LocalRootPath = PlayerPrefs.GetString(PATH_KEY);
+            }
+            else
+            {
+                PlayerPrefs.SetString(PATH_KEY, m_LocalRootPath);
+                PlayerPrefs.Save();
+            }
+
+            if (!Directory.Exists(m_LocalRootPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(m_LocalRootPath);
+                }
+                catch (Exception e)
+                {
+                    ToolController.Instance.MessagePopup.ShowPopup("Error",
+                   "There was a problem creating folder: " + m_LocalRootPath,
+                   "OK", OnOkPopupBtnPress,
+                   string.Empty, null, string.Empty, null);
+                }
+               
+            }
+        }
+
+        public void UpdateToolPath(string newPath)
+        {
+            if (string.IsNullOrEmpty(newPath))
+            {
+                ToolController.Instance.MessagePopup.ShowPopup("Error",
+                   "The new path is empty",
+                   "OK", OnOkPopupBtnPress,
+                   string.Empty, null, string.Empty, null);
+            }
+
+            m_LocalRootPath = newPath;
+
+            if (!Directory.Exists(m_LocalRootPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(m_LocalRootPath);
+
+                    PlayerPrefs.SetString(PATH_KEY, m_LocalRootPath);
+                    PlayerPrefs.Save();
+
+                    ToolController.Instance.MessagePopup.ShowPopup("Completed!",
+                   "The files will be saved in " + m_LocalRootPath,
+                   "OK", OnOkPopupBtnPress,
+                   string.Empty, null, string.Empty, null);
+
+                }
+                catch (Exception e)
+                {
+                    ToolController.Instance.MessagePopup.ShowPopup("Error",
+                   "There was a problem creating folder: " + m_LocalRootPath,
+                   "OK", OnOkPopupBtnPress,
+                   string.Empty, null, string.Empty, null);
+                }
+
+            }else
+            {
+                PlayerPrefs.SetString(PATH_KEY, m_LocalRootPath);
+                PlayerPrefs.Save();
+
+                ToolController.Instance.MessagePopup.ShowPopup("No action",
+                  "The path already exists",
+                  "OK", OnOkPopupBtnPress,
+                  string.Empty, null, string.Empty, null);
+            }
+        }
+
+        private void OnOkPopupBtnPress()
+        {
+            ToolController.Instance.MessagePopup.Hide();
         }
 
         public bool Save(Round round)
@@ -293,20 +378,6 @@ namespace CCounter
                 AppController.Instance.Launcher.Description += "\n - Completed: " + urlFile;
             }             
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public void SaveRoundToJSON(Round round)
         {

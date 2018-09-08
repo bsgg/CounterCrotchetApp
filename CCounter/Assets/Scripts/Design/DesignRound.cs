@@ -22,8 +22,8 @@ namespace CCounter
         }
         [SerializeField] private InputField m_Repeats;
 
-        [SerializeField]
-        private Toggle m_NoDuplicateStichToogle;
+        /*[SerializeField]
+        private Toggle m_NoDuplicateStichToogle;*/
 
 
         [Header("Round Settings")]
@@ -114,7 +114,7 @@ namespace CCounter
             m_Stich.text = string.Empty;
             m_Repeats.text = "1";
 
-            m_NoDuplicateStichToogle.isOn = false;
+            //m_NoDuplicateStichToogle.isOn = false;
 
             m_RoundRepeats.text = "1";
             m_NormalToggle.isOn = true;

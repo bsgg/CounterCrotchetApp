@@ -42,11 +42,13 @@ namespace CCounter
         #endregion Settings
 
         #region Round
+
         public void AddStich()
         {
             if (!string.IsNullOrEmpty(m_Round.Stich))
             {
                 Stich stich = new Stich();
+
                 stich.Name = m_Round.Stich;
 
                 stich.NumberRepeats = m_Round.StichRepeats;
@@ -79,9 +81,9 @@ namespace CCounter
                 {
                     // Check special stich
                     string auxS = string.Empty;
-                    if (m_ListStiches[i].NumberRepeats > 0)
+                    if (m_ListStiches[i].NumberRepeats > 1)
                     {
-                        auxS = " - " + m_ListStiches[i].NumberRepeats + " " + m_ListStiches[i].Name;
+                        auxS = " - " + m_ListStiches[i].NumberRepeats + " x " + m_ListStiches[i].Name;
                     }
                     else
                     {
@@ -119,15 +121,15 @@ namespace CCounter
                     for (int iStich = 0; iStich < m_ListStiches.Count; iStich++)
                     {
                         Stich stich = m_ListStiches[iStich];
-                        m_CurrentRound.StichCount += stich.NumberRepeats;
+                        //m_CurrentRound.StichCount += stich.NumberRepeats;
 
                         // Find incremental 
                         string auxS = stich.Name.TrimStart().TrimEnd().ToLower();
-                        if (auxS.Contains("inc") || auxS.Contains("incremental"))
+                        /*if (auxS.Contains("inc") || auxS.Contains("incremental"))
                         {
                             Debug.Log("Number Stiches x2");
                             m_CurrentRound.StichCount += (stich.NumberRepeats * 2);
-                        }
+                        }*/
                     }
                 }
 

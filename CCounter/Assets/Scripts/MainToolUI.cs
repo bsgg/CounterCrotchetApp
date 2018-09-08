@@ -9,28 +9,20 @@ namespace CCounter
 {
     public class MainToolUI : UIBase
     {
-<<<<<<< HEAD
 
-=======
-        [SerializeField] private Text m_FilePath;
->>>>>>> 14df2e323b24f566de863d1d189a0594eeb8920b
         [SerializeField] private InputField m_FilePathInput;
         [SerializeField] private InputField m_FileNameInput;
 
         public override void Show()
         {
-<<<<<<< HEAD
-=======
-            //m_FilePath.text = ToolController.Instance.FileHandler.LocalRootPath;
 
->>>>>>> 14df2e323b24f566de863d1d189a0594eeb8920b
             m_FilePathInput.text = ToolController.Instance.FileHandler.LocalRootPath;
             m_FileNameInput.text = ToolController.Instance.FileHandler.IndexFileName;
 
             base.Show();
         }
 
-<<<<<<< HEAD
+
 
         public void GenerateIndexFile()
         {
@@ -93,13 +85,7 @@ namespace CCounter
         public void CleanFiles()
         {
             string path = m_FilePathInput.text;
-=======
-        public void OnUpdateSettings()
-        {
-            ToolController.Instance.FileHandler.UpdateToolPath(m_FilePathInput.text);
 
-            /*string path = m_FilePathInput.text;
->>>>>>> 14df2e323b24f566de863d1d189a0594eeb8920b
             Debug.Log("PATH " + path);
 
             if (string.IsNullOrEmpty(path))
@@ -126,7 +112,7 @@ namespace CCounter
                    string.Empty, null, string.Empty, null);
                 }
 
-<<<<<<< HEAD
+
             }
         }
 
@@ -135,12 +121,6 @@ namespace CCounter
             ToolController.Instance.MessagePopup.Hide();
         }
 
-=======
-            }*/
-
-        }
-        
->>>>>>> 14df2e323b24f566de863d1d189a0594eeb8920b
 
     }
 }

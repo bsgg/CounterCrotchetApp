@@ -65,6 +65,9 @@ namespace CCounter
 
         private void Start()
         {
+            // Initialize file
+            m_FileHandler.InitializeTool();
+
             //m_FileHandler.CreateFileIndex();
             m_MenuTool.Hide();
             m_MessagePopup.Hide();
@@ -74,7 +77,6 @@ namespace CCounter
 
             //m_DesignControl.Show();
         }
-
         #region MainMenu
 
         public void OnMenuPress()
